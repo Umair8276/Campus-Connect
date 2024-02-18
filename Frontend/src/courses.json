@@ -1,0 +1,48 @@
+[
+    {
+        "id": 1,
+        "title": "HTML Courses for Beginners",
+        "thumbnail": "./assets/htmlB.svg",
+        "category": "HTML",
+        "ratings": 3.5,
+        "review": "100",
+        "price": "200"
+    },
+    {
+        "id": 2,
+        "title": "Make Business Courses for Beginners",
+        "thumbnail": "./assets/businessB.svg",
+        "category": "Business",
+        "ratings": 4.5,
+        "review": "150",
+        "price": "500"
+    },
+    {
+        "id": 3,
+        "title": "C++ Courses for Beginners",
+        "thumbnail": "./assets/businessB2.svg",
+        "category": "Coding",
+        "ratings": 4.5,
+        "review": "500",
+        "price": "1000"
+    },
+    {
+        "id": 4,
+        "title": "Design Courses for Beginners to experience",
+        "thumbnail": "./assets/designB.svg",
+        "category": "Design",
+        "ratings": 4,
+        "review": "100",
+        "price": "100"
+    },
+    {
+        "id": 5,
+        "title": "Design Courses for Beginners to experience",
+        "thumbnail": "./assets/designB.svg",
+        "category": "Design",
+        "ratings": 4,
+        "review": "100",
+        "price": "100"
+
+    }
+]

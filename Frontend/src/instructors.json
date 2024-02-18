@@ -1,0 +1,26 @@
+[
+    {
+            "id":1,
+            "name":"Jacob Jones",
+            "title":"UI-UX Design Expart",
+            "img":"../assets/inst1.svg"
+    },
+    {
+            "id":2,
+            "name":"Alice Michael",
+            "title":"Social Media Expart",
+            "img":"../assets/inst2.svg"
+    },
+    {
+            "id":3,
+            "name":"San Fero",
+            "title":"Business Idea Expart",
+            "img":"../assets/inst3.svg"
+    },
+    {
+            "id":4,
+            "name":"Adidas Co",
+            "title":"Photograpy Expart",
+            "img":"../assets/inst4.svg"
+    }
+]
