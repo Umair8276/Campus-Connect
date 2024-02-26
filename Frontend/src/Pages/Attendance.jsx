@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, Button, Toolbar, Typography } from "@mui/material";
 import AttandanceList from "../Components/common/AttendanceList.jsx";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { AppContext } from "../Context/AuthContext.jsx";
 
 const attendance = [
   {
@@ -32,7 +34,23 @@ const attendance = [
   },
 ]
 const Attendance = () => {
+  const {user} = useContext(AppContext);
+  const [data,setData] = useState([])
   const navigate = useNavigate();
+  const getFacultyAttendence = () => {
+     axios.get(`http://localhost:5000/api/att/getfacatt/${user._id}`)
+     .then(res => {
+      console.log("Attendence ",res.data.facAtt)
+      setData(res.data.facAtt)
+     })
+     .catch(err => {
+      console.log(err)
+     })
+  }
+  useEffect( () => {
+    getFacultyAttendence()
+  },[])
+
   return (
     <>
       <Box
@@ -59,12 +77,16 @@ const Attendance = () => {
           </Button>
         </Toolbar>
         {
-          attendance.map((attendance,index)=>(
+          data.map((attendance,index)=>(
             <AttandanceList 
               key={index}
-              date={attendance.date}
+              data={attendance}
+              date={attendance.createdAt}
               subject={attendance.subject}
+              branch = {attendance.branch}
+              sem = {attendance.sem}
               present={attendance.present}
+              classes={attendance.classes}
             />
           ))
         }

@@ -81,7 +81,7 @@ const Header = () => {
       sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
     >
       <Toolbar>
-        <Typography variant="h5">{user.name}</Typography>
+        <Typography variant="h5">{user && user?.name}</Typography>
         <Box
           sx={{
             flexGrow: 0,

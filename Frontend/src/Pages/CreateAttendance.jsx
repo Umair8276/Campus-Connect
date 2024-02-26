@@ -52,7 +52,9 @@ const CreateAttendance = () => {
   const [students,setStudents] = useState([])
   const [totalStudents,setTotalStudents] = useState("")
   const {user} = useContext(AppContext)
-  const {attendancePercentage} = useContext(AppContext)
+  const {presentStudent,setPresentStudent,absentStu,setAbsentStu} = useContext(AppContext);
+  const navigate = useNavigate();
+  const [percentage,setPercentage] = useState([])
 
   const [sub,setSub] = useState();
 
@@ -60,8 +62,8 @@ const CreateAttendance = () => {
     {
       branch: 'Computer',
       subjects: [
-        { semester: 1, subjects: ['Mathematics-I', 'Physics', 'Chemistry', 'Introduction to Programming'] },
-        { semester: 2, subjects: ['Mathematics-II', 'Digital Logic Design', 'Data Structures', 'Electrical Circuits'] },
+        { semester: 1, subjects: ['Math', 'Physics', 'Chemistry', 'Introduction to Programming'] },
+        { semester: 2, subjects: ['MathI', 'Digital Logic Design', 'Data Structures', 'Electrical Circuits'] },
         { semester: 3, subjects: ['Computer Organization and Architecture', 'Database Management Systems', 'Object-Oriented Programming', 'Discrete Mathematics'] },
         { semester: 4, subjects: ['Algorithms', 'Microprocessors', 'Operating Systems', 'Computer Networks'] },
         // Add more semesters and subjects as needed
@@ -71,8 +73,8 @@ const CreateAttendance = () => {
       branch: 'Mechanical Engineering',
       subjects: [
         // Define subjects for each semester in the mechanical engineering branch
-        { semester: 1, subjects: ['Mathematics-I', 'Physics', 'Chemistry', 'Introduction to Programming'] },
-        { semester: 2, subjects: ['Mathematics-II', 'Digital Logic Design', 'Data Structures', 'Electrical Circuits'] },
+        { semester: 1, subjects: ['Math', 'Physics', 'Chemistry', 'Introduction to Programming'] },
+        { semester: 2, subjects: ['MathI', 'Digital Logic Design', 'Data Structures', 'Electrical Circuits'] },
         { semester: 3, subjects: ['Computer Organization and Architecture', 'Database Management Systems', 'Object-Oriented Programming', 'Discrete Mathematics'] },
         { semester: 4, subjects: ['Algorithms', 'Microprocessors', 'Operating Systems', 'Computer Networks'] },
       ]
@@ -81,8 +83,8 @@ const CreateAttendance = () => {
       branch: 'Electronics Engineering',
       subjects: [
         // Define subjects for each semester in the electronics engineering branch
-        { semester: 1, subjects: ['Mathematics-I', 'Physics', 'Chemistry', 'Introduction to Programming'] },
-        { semester: 2, subjects: ['Mathematics-II', 'Digital Logic Design', 'Data Structures', 'Electrical Circuits'] },
+        { semester: 1, subjects: ['Math', 'Physics', 'Chemistry', 'Introduction to Programming'] },
+        { semester: 2, subjects: ['MathI', 'Digital Logic Design', 'Data Structures', 'Electrical Circuits'] },
         { semester: 3, subjects: ['Computer Organization and Architecture', 'Database Management Systems', 'Object-Oriented Programming', 'Discrete Mathematics'] },
         { semester: 4, subjects: ['Algorithms', 'Microprocessors', 'Operating Systems', 'Computer Networks'] },
       ]
@@ -91,8 +93,8 @@ const CreateAttendance = () => {
       branch: 'Civil Engineering',
       subjects: [
         // Define subjects for each semester in the civil engineering branch
-        { semester: 1, subjects: ['Mathematics-I', 'Physics', 'Chemistry', 'Introduction to Programming'] },
-        { semester: 2, subjects: ['Mathematics-II', 'Digital Logic Design', 'Data Structures', 'Electrical Circuits'] },
+        { semester: 1, subjects: ['Math', 'Physics', 'Chemistry', 'Introduction to Programming'] },
+        { semester: 2, subjects: ['MathI', 'Digital Logic Design', 'Data Structures', 'Electrical Circuits'] },
         { semester: 3, subjects: ['Computer Organization and Architecture', 'Database Management Systems', 'Object-Oriented Programming', 'Discrete Mathematics'] },
         { semester: 4, subjects: ['Algorithms', 'Microprocessors', 'Operating Systems', 'Computer Networks'] },
       ]
@@ -123,6 +125,7 @@ const CreateAttendance = () => {
     getSubjects(branch,sem)
    },[branch,sem])
 
+  
   //  Find All Students Based on branch,class and sem
   const fetchStu = () => {
     axios.get(`http://localhost:5000/api/att/getstu/${branch}/${classes}/${sem}`)
@@ -130,7 +133,6 @@ const CreateAttendance = () => {
       // Sort By Roll No
       res.data.students.sort((a, b) => a.rollNo - b.rollNo);
       console.log("Students : ",res.data.students)
-
       setStudents(res.data.students)
       setTotalStudents(res.data.students.length)
     })
@@ -139,9 +141,67 @@ const CreateAttendance = () => {
     })
   }
 
-   
+  useEffect( () => {
+    fetchStu()
+  },[subject])
 
-  const navigate = useNavigate();
+   const markAttendence = () => {
+      axios.post("http://localhost:5000/api/att/createatt",{
+         studentId:presentStudent,
+         facultyId:user._id,
+         subject,
+         branch,
+         sem,
+         classes
+      }).then(res => {
+        console.log(res.data)
+      }).catch(err => {
+        console.log(err)
+      })
+   }
+
+  //  let arr = [];
+  //  const getAttPercentage = () => {
+  //  students.forEach(item => {
+  //     axios.get(`http://localhost:5000/api/att/getatt/${item._id}/${subject}`)
+  //     .then(res => {
+  //       console.log("res ",res.data)
+  //       setPercentage(res.data)
+  //     }).catch(err => {
+  //       console.log(err)
+  //     })
+  //  })
+  // }
+  // console.log("Arr : ",arr)
+
+  const getAttPercentage = () => {
+    const promises = students.map( (item) => {
+      return axios.get(`http://localhost:5000/api/att/getatt/${item._id}/${subject}`)
+        .then(res => res.data.calcPercentage)
+        .catch(err => {
+          console.log(err);
+          return null; // or handle error as needed
+        });
+    });
+
+    Promise.all(promises)
+      .then(allPercentages => {
+        // Filter out null values if any
+        const filteredPercentages = allPercentages.filter(percentage => percentage !== null);
+        setPercentage(filteredPercentages);
+      })
+      .catch(err => {
+        console.log("Error fetching percentages for all students:", err);
+        // Handle error as needed
+      });
+  }
+
+
+   useEffect( () => {
+    getAttPercentage();
+    console.log("percentage :",percentage)
+   },[students.length > 0])
+
   return (
     <>
       <Box
@@ -284,7 +344,7 @@ const CreateAttendance = () => {
 
                     }
                     </FormControl>
-
+ 
              
 
             <FormControl
@@ -312,23 +372,7 @@ const CreateAttendance = () => {
                   </Select>
             </FormControl>
 
-            {/* <FormControl
-              sx={{
-                width: "40%",
-              }}
-            >
-              <InputLabel id="subject">Subject</InputLabel>
-              <Select
-                labelId="subject"
-                value={subject}
-                label="Subject"
-                onChange={ChangeSubject}
-              >
-                <MenuItem value={10}>Data Structure & Alogorithm</MenuItem>
-                <MenuItem value={20}>Software Engineering</MenuItem>
-                <MenuItem value={30}>Natural Language Processing</MenuItem>
-              </Select>
-            </FormControl> */}
+  
             <Button
               variant="contained"
               onClick = {() => fetchStu()}
@@ -340,37 +384,6 @@ const CreateAttendance = () => {
             </Button>
           </Stack>
 
-          {/* <Stack
-            sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              flexDirection: "row",
-              gap: 4,
-              marginLeft: "auto",
-            }}
-          >
-           
-          
-
-
-
-            <input
-              type="date"
-              name=""
-              id=""
-              style={{
-                padding: "8px",
-              }}
-            />
-            <input
-              type="time"
-              name=""
-              id=""
-              style={{
-                padding: "8px",
-              }}
-            />
-          </Stack> */}
           {
              students && students.length > 0 &&
           <Typography
@@ -392,7 +405,7 @@ const CreateAttendance = () => {
                 color: "#11A529",
               }}
             >
-              Present: 00
+              Present: {presentStudent.length}
             </Typography>
             <Typography
               sx={{
@@ -401,32 +414,41 @@ const CreateAttendance = () => {
                 color: "#F93333",
               }}
             >
-              Absent: 00
+              Absent: {absentStu.length}
             </Typography>
           </Stack>
           }
+          {
+             students && students.length > 0 &&
           <Typography fontSize={22} fontWeight={450} margin="1rem 0rem">
             List of Students
           </Typography>
+          }
 
           <TableContainer
-            component={Paper}
+            component={  students && students.length > 0 && Paper}
             sx={{
               overflowY: "scroll",
               height: 400,
             }}
           >
             <Table stickyHeader>
+              {
+              students && students.length > 0 &&
               <TableHead>
                 <TableRow>
                   <TableCell>Roll Number</TableCell>
                   <TableCell>Student Name</TableCell>
                   <TableCell>Attendance</TableCell>
-                  <TableCell>Attendance percentage</TableCell>
+                  <TableCell>Percentage</TableCell>
+                 
+                 
                 </TableRow>
               </TableHead>
+              }
               <TableBody>
-                {students.map((stu) => (
+                {percentage && students.map((stu,per,p) => (
+                
                   <TableRow
                     key={stu.rollNo}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -439,18 +461,26 @@ const CreateAttendance = () => {
                       {stu.firstName} {stu.lastName}
                     </TableCell>
                     <TableCell>
-                      <MaintainAttendance branch = {branch} classes = {classes} subject = {subject} sem = {sem} studentId = {stu._id} facultyId = {user._id} />
+                      <MaintainAttendance branch = {branch} classes = {classes} subject = {subject} sem = {sem} studentId = {stu._id} facultyId = {user._id}   />
                     </TableCell>
 
                     <TableCell component="th" scope="row">
-                      {attendancePercentage}
+                       {percentage[per]}
                     </TableCell>
 
                   </TableRow>
                 ))}
+                 {/* <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <Button variant="contained" style={{}}>Mark Attendence</Button>
+                </div> */}
               </TableBody>
             </Table>
           </TableContainer>
+          
+          {
+            students  && students.length > 0 &&
+          <Button variant="contained"  onClick = {() => markAttendence()} style={{marginLeft:"500px",marginTop:"20px"}}  >Mark Attendence</Button>
+          }
         </Box>
       </Box>
     </>

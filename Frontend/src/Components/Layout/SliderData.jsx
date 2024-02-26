@@ -49,6 +49,11 @@ export const adminMenu = [
       path: "/clerk/students",
     },
     {
+      title: "Attendence",
+      icon: <NoteAltOutlinedIcon />,
+      path: "/clerk/attendence",
+    },
+    {
       title: "Notice",
       icon: <NoteAddOutlinedIcon />,
       path: "/clerk/notice",
@@ -78,7 +83,7 @@ export const adminMenu = [
   export const facultyMenu = [
     
     {
-      title: "Attendece",
+      title: "Attendence",
       icon: <BackHandOutlinedIcon />,
       path: "/faculty/attendance",
     },

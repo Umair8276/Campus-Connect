@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect,useState } from "react";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import {
@@ -18,10 +18,18 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import moment from 'moment';
+import axios from "axios"
+import { AppContext } from "../../Context/AuthContext";
 
-const AttendanceList = ({date,subject,present}) => {
+const AttendanceList = ({date,subject,present,branch,sem,classes,data}) => {
   const [open, setOpen] = React.useState(false);
   const absent = 75 - present;
+  const [students,setStudents] = useState([])
+  const [totalStudents,setTotalStudents] = useState("")
+  const {user} = useContext(AppContext)
+  console.log("Data :",data)
+ 
   const handleClick = () => {
     setOpen(!open);
   };
@@ -33,6 +41,7 @@ const AttendanceList = ({date,subject,present}) => {
     newAttendance[index] = !newAttendance[index];
     setAttendance(newAttendance);
   };
+
 
   function createData(rollNumber, name) {
     return { rollNumber, name };
@@ -52,6 +61,31 @@ const AttendanceList = ({date,subject,present}) => {
     createData("20CO16", "Test"),
   ];
 
+  const fetchStu = () => {
+    axios.get(`http://localhost:5000/api/att/getstu/${branch}/${classes}/${sem}`)
+    .then(res => {
+      // Sort By Roll No
+      res.data.students.sort((a, b) => a.rollNo - b.rollNo);
+      console.log("Students : ",res.data.students)
+      setStudents(res.data.students)
+      setTotalStudents(res.data.students.length)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+  useEffect( () => {
+    fetchStu()
+  },[open])
+
+  const timestamp = new Date(date);
+
+  // Extract time components
+  const hours = timestamp.getUTCHours();
+  const minutes = timestamp.getUTCMinutes();
+  const seconds = timestamp.getUTCSeconds();
+
+
   return (
     <>
       <Box
@@ -68,9 +102,9 @@ const AttendanceList = ({date,subject,present}) => {
         }}
       >
         <Typography fontWeight={500} fontSize={20}>
-          {date}
+          {moment(date).format('DD-MM-YYYY')}
         </Typography>
-        <Button variant="text">75/{present}</Button>
+        {/* <Button variant="text">75/{data.length}</Button> */}
         <IconButton title="More" onClick={handleClick}>
           {open ? <ExpandLess /> : <ExpandMore />}
         </IconButton>
@@ -111,7 +145,7 @@ const AttendanceList = ({date,subject,present}) => {
                 },
               }}
             >
-              Batch: BECO-20
+              Batch:{branch}
             </Button>
             <Button
               startIcon={<AccessTimeOutlinedIcon />}
@@ -120,7 +154,7 @@ const AttendanceList = ({date,subject,present}) => {
                 color: "#D3D3D3",
               }}
             >
-              12:45 PM
+              {hours.toString().padStart(2, '0')}:{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
             </Button>
             <Button
               startIcon={<CalendarMonthOutlinedIcon />}
@@ -129,7 +163,7 @@ const AttendanceList = ({date,subject,present}) => {
                 color: "#D3D3D3",
               }}
             >
-              25 july 2023
+              {moment(date).format('DD-MM-YYYY')}
             </Button>
           </Stack>
           <Typography
@@ -137,9 +171,9 @@ const AttendanceList = ({date,subject,present}) => {
             fontWeight={450}
             margin="3rem 0rem 1rem 0rem"
           >
-            Total Student: 75
+            Total Student: {students.length}
           </Typography>
-          <Stack display="felx" flexWrap="wrap" flexDirection="row" gap={5}>
+          {/* <Stack display="felx" flexWrap="wrap" flexDirection="row" gap={5}>
             <Typography
               sx={{
                 fontWeight: 450,
@@ -158,7 +192,7 @@ const AttendanceList = ({date,subject,present}) => {
             >
               Absent: {absent}
             </Typography>
-          </Stack>
+          </Stack> */}
           <Typography fontSize={22} fontWeight={450} margin="1rem 0rem">
             List of Absent Students
           </Typography>
@@ -179,21 +213,21 @@ const AttendanceList = ({date,subject,present}) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {students.map((row) => (
                   <TableRow
                     key={row.rollNumber}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row.rollNumber}
+                      {row.rollNo}
                     </TableCell>
 
                     <TableCell component="th" scope="row">
-                      {row.name}
+                      {row.firstName} {row.lastName}
                     </TableCell>
 
                     <TableCell>
-                      {false ? (
+                      { data && data?.studentId?.includes(row._id)? (
                         <Button
                           sx={{
                             color: "#11A529",

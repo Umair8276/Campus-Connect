@@ -22,7 +22,8 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../Context/AuthContext";
 import axios from "axios";
-import { Oval } from 'react-loader-spinner'
+import { Oval } from 'react-loader-spinner';
+import moment from "moment"
 
 const NoticeCard = () => {
   const [open, setOpen] = React.useState(false);
@@ -151,7 +152,8 @@ const NoticeCard = () => {
             }}
           >
             <CalendarMonthIcon />
-            {notices.createdAt}
+            
+            {moment(notices.createdAt).format('DD-MM-YYYY')}
           </Stack>
           <Button
             fullWidth
@@ -221,7 +223,7 @@ const NoticeCard = () => {
               }}
             >
               <CalendarMonthIcon />
-              {singleNotice.createdAt}
+              {moment(singleNotice.createdAt).format('DD-MM-YYYY')}
             </Stack>
             <Typography
               fontSize={24}

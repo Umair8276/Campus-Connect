@@ -1,10 +1,10 @@
 const mongoose = require("mongoose")
 
 const attendenceSchema = new mongoose.Schema({
-  studentId:{
+  studentId:[{
     type:mongoose.Schema.Types.ObjectId,
     ref:"Admission"
-  },
+  }],
   facultyId:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"Register"
@@ -21,10 +21,11 @@ const attendenceSchema = new mongoose.Schema({
     type:String,
     required:true
   },
-  status:{
+  classes:{
     type:String,
     required:true
-  }
+  },
+  
 
 },
 {timestamps:true}

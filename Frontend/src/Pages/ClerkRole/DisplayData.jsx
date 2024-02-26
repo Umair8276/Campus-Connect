@@ -17,6 +17,7 @@ import Stack from '@mui/material/Stack';
 import InputLabel from '@mui/material/InputLabel';
 import { useState } from 'react';
 import axios from "axios"
+import { useNavigate } from 'react-router-dom';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -56,6 +57,7 @@ const DisplayData = () => {
   const [stu_class,setStu_Class] = useState("");
   const [rollNo,setRollNo] = useState("")
   const [data,setData] = useState([])
+  const navigate = useNavigate();
 
   const getData = () => {
     console.log(branch,stu_class,rollNo)
@@ -158,7 +160,7 @@ const DisplayData = () => {
                 <StyledTableCell align="right">{data.branch}</StyledTableCell>
                 <StyledTableCell align="right">{data.stu_class}</StyledTableCell>
                 <StyledTableCell align="right">
-                  <Button variant="contained"  >Edit</Button>
+                  <Button variant="contained" onClick={() => navigate(`/clerk/edit/${data._id}`)}  >Edit</Button>
                 </StyledTableCell>
 
               </StyledTableRow>

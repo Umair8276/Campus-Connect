@@ -11,9 +11,11 @@ import CreateAttendance from "./CreateAttendance";
 import CreateAssignment from "./CreateAssignment";
 import InstructorProfile from "./InstructorProfile";
 import StLogin from './StLogin';
-import Admission from "./ClerkRole/Admission"
+import {Admission} from "./ClerkRole/Admission"
 import DisplayData from "./ClerkRole/DisplayData";
 import CreateNotice from "./CreateNotice";
+import EditData from "./EditData/EditData";
+import CheckAttendence from "./CheckAttendence/CheckAttendence";
 export { 
     Home, 
     LandingPage, 
@@ -30,5 +32,7 @@ export {
     InstructorProfile,
     Admission,
     DisplayData,
-    CreateNotice
+    CreateNotice,
+    EditData,
+    CheckAttendence
 };

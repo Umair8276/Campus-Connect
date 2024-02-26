@@ -36,26 +36,14 @@ import axios from "axios"
 import DoneIcon from '@mui/icons-material/Done';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Oval } from 'react-loader-spinner'
+import { Oval } from 'react-loader-spinner';
+import moment from 'moment';
+
 
 
 function createData(rollNumber, name) {
   return { rollNumber, name };
 }
-
-const student = [
-  createData("20CO01", "Test"),
-  createData("20CO02", "Test"),
-  createData("20CO03", "Test"),
-  createData("20CO04", "Test"),
-  createData("20CO05", "Test"),
-  createData("20CO06", "Test"),
-  createData("20CO07", "Test"),
-  createData("20CO08", "Test"),
-  createData("20CO09", "Test"),
-  createData("20CO15", "Test"),
-  createData("20CO16", "Test"),
-];
 
 const AssignmentCard = ({
   title,
@@ -88,7 +76,8 @@ const AssignmentCard = ({
   const [userFile,setUserFile] = useState("");
   const [reUpload,setReUpload] = useState(true)
   const [userAssignment,setUserAssignment] = useState("")
-  const [commentData,setCommentData] = useState([])
+  const [commentData,setCommentData] = useState([]);
+  const [resLoading,setResLoading] = useState(false)
   const { user } = useContext(AppContext )
 
   const VisuallyHiddenInput = styled("input")({
@@ -225,11 +214,13 @@ const AssignmentCard = ({
 
   // Find student Assignment Upload Count and student data
   const getCount = () => {
+    setResLoading(true)
     axios.get(`http://localhost:5000/api/ass/findresponse/${id}`)
     .then(res => {
       console.log("Assignment Count : " , res.data)
-       setCount(res.data.count)
+      //  setCount(res.data.count)
        setStudent(res.data.resp)
+       setResLoading(false)
     }).catch(err => {
       console.log(err)
     })
@@ -252,7 +243,7 @@ const AssignmentCard = ({
   }
 
 // Get Assignment based on assignmentId and StudentId
-  const getUserAssignment = (id) => {
+  const getUserAssignment = () => {
     console.log("AssignmentId",id)
     axios.get(`http://localhost:5000/api/ass/getuserass/${user._id}/${id}`,{
       studentId:user._id,
@@ -343,7 +334,7 @@ const AssignmentCard = ({
             }}
           >
             <CalendarMonthIcon />
-            {date}
+           {percentage && percentage[per]?.averagePercentage}
           </Stack>
           {/* <Stack
             sx={{
@@ -472,8 +463,11 @@ const AssignmentCard = ({
                   borderRadius: "6px",
                 }}
               >
-                {scheduleDate.substring(0,10)}
+                {/* {scheduleDate.substring(0,10)} */}
+                {/* {format(scheduleDate, 'MMMM do yyyy, h:mm:ss a')} */}
+                {/* {moment().format(scheduleDate,'MMMM Do YYYY, h:mm:ss a')} */}
               </Button>
+              
              
             </Stack>
             <Typography
@@ -501,7 +495,7 @@ const AssignmentCard = ({
                   borderRadius: "6px",
                 }}
               >
-                {date}
+                 {moment(date).format('DD-MM-YYYY')}
               </Button>
           
             </Stack>
@@ -946,7 +940,7 @@ const AssignmentCard = ({
                       borderRadius: "6px",
                     }}
                   >
-                    {scheduleDate}
+                    {moment(scheduleDate).format('DD-MM-YYYY')}
                   </Button>
                   <Button
                     sx={{
@@ -985,7 +979,7 @@ const AssignmentCard = ({
                       borderRadius: "6px",
                     }}
                   >
-                    {lastDate}
+                     {moment(lastDate).format('DD-MM-YYYY')}
                   </Button>
                   <Button
                     sx={{
@@ -1050,7 +1044,7 @@ const AssignmentCard = ({
                     </TableHead>
                     <TableBody>
                       {
-                       isLoading
+                       resLoading
                        ?
                        <div style={{marginLeft:"400px",marginTop:"100px"}}>
                        <Oval

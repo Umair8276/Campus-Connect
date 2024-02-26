@@ -1,6 +1,7 @@
 
-// const RegisterModal = require("../Modals/RegisterModal")
+const jwt = require('jsonwebtoken');
 const RegisterModal = require("../Modals/RegisterModal")
+const JWT_SECRET_KEY = 'Zaid';
 
 const Facultyregistration = async(req,res) => {
   // const {name,email,password,role,dept,qualification} = req.body;
@@ -15,21 +16,23 @@ const Facultyregistration = async(req,res) => {
      });
      try {
        await newRegistration.save();
-     } catch (error) {
+      } catch (error) {
         console.log(error)
-     }
-     res.send({msg:"Registration Successfully",newRegistration})
-}
-
-const getAllFaculty = async(req,res) => {
-  let fac;
-  try {
-     fac = await RegisterModal.find({});
-  } catch (error) {
-    console.log(error)
-  }
-  if(fac)
-    return res.send({fac})
+      }
+      res.send({msg:"Registration Successfully",newRegistration})
+    }
+    
+    const getAllFaculty = async(req,res) => {
+      let fac;
+      try {
+        fac = await RegisterModal.find({});
+      } catch (error) {
+        console.log(error)
+      }
+      if(fac){
+        
+        return res.send({fac})
+      }
   else
   return req.send({err:"Something went wrong"})
 }
@@ -43,8 +46,11 @@ const facultyLogin = async(req,res) => {
     console.log(error)
   }
   if(facLogin){
-    if(facLogin.password==password)
-      return res.send({msg:"Login Successfully",user:facLogin});
+    if(facLogin.password==password){
+      const token = jwt.sign({ userId: facLogin._id }, JWT_SECRET_KEY, { expiresIn: '1h' });
+      return res.send({msg:"Login Successfully",user:facLogin,token});
+
+    }
     else 
       return res.send({msg:"Password is incorrect"});
   }

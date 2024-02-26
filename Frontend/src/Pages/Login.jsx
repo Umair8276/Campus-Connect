@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { AppContext } from './../Context/AuthContext';
 import { toast } from 'react-toastify';
+import Cookies from 'js-cookie';
 
 const Login = () => {
   const [btn,setBtn] = useState("");
@@ -15,6 +16,7 @@ const Login = () => {
   const [email,setEmail] = useState("");
   const [error,setError] = useState("")
   const {dispatch} = useContext(AppContext)
+  const [token, setToken] = useState('');
   
   const navigate = useNavigate();
 
@@ -43,6 +45,7 @@ const Login = () => {
       toast.success("Login Successfully", {
         autoClose: 1500, 
       })
+      Cookies.set('token', res.data.token);
       dispatch({type:"LOGIN" ,payload:res.data.user})
      }).catch(err => {
       setError(err)

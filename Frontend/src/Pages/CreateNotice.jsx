@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { Oval } from 'react-loader-spinner'
 import DownloadDoneIcon from '@mui/icons-material/DownloadDone';
 import { ToastContainer, toast } from 'react-toastify';
+import "./EditData/Edit.css"
 
 
 
@@ -115,7 +116,97 @@ const CreateNotice = () => {
 
             <h1>Create Notice</h1>
             <Divider />
-            <Box style={{display: "flex", justifyContent: "center",alignItems:"center",width:"100%",height:"100%", }}>
+
+
+            <div className="formCont">
+        <div className="form-cont">
+          <h3 className="Title  text-center mt-3">Create Attendence</h3>
+          <div className="input_field">
+            <input
+              type="text"
+              className="inputUser"
+              name="bookName"
+              value={content}
+              placeholder='Enter Content'
+            onChange={(e) => setContent(e.target.value)}
+            />
+          </div>
+
+          <FormControl sx={{ m: 1.5, minWidth: 350,ml:3,border:"1px solid #0abde3",borderRadius:"5px" }}>
+                    <InputLabel id="demo-simple-select-autowidth-label">Branch</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-autowidth-label"
+                        id="demo-simple-select-autowidth"
+                        value={branch}
+                        onChange={(e) => setBranch(e.target.value)}
+                        autoWidth
+                        label="Branch"
+                    >
+                        <MenuItem value={"Computer"}>Computer</MenuItem>
+                        <MenuItem value={"Mechanical"}>Mechanical</MenuItem>,
+                        <MenuItem value={"Electrical"}>Electrical</MenuItem>
+                        <MenuItem value={"Electronics"}>Electronics</MenuItem>
+                    </Select>
+
+
+                </FormControl>
+             <FormControl sx={{ mt: 1, minWidth: 350,ml:3,border:"1px solid #0abde3",borderRadius:"5px" }}>
+                    <InputLabel id="demo-simple-select-autowidth-label">Class</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-autowidth-label"
+                        id="demo-simple-select-autowidth"
+                        value={classes}
+                        onChange={(e) => setClasses(e.target.value)}
+                        autoWidth
+                        label="Class"
+                    >
+                        <MenuItem value={"FE"}>FE</MenuItem>
+                        <MenuItem value={"SE"}>SE</MenuItem>
+                        <MenuItem value={"TE"}>TE</MenuItem>
+                        <MenuItem value={"BE"}>BE</MenuItem>
+                    </Select>
+
+
+                </FormControl>
+
+
+                <Box style={{ width: "100%", display: "flex", flexDirection: "column",marginLeft:"15px" }}>
+                <Button
+                    component="label"
+                    variant="outlined"
+                    startIcon={<CloudUploadIcon />}
+                    fullWidth
+                    sx={{
+                        mt: "1.5rem",
+                    }}
+                    style={{marginLeft:"10px", width: "350px" }}
+                >
+                    Upload file  {loading ?       <Oval
+                  visible={true}
+                  height="30"
+                  width="30"
+                  color="#4fa94d"
+                 ariaLabel="oval-loading"
+                
+                 />
+                 :
+                 loading==false
+                 ?
+                 <DownloadDoneIcon color="green"/>
+                 :
+                 <></>}
+                    <VisuallyHiddenInput type="file" onChange={(e) => handleUpload(e.target.files[0])} />
+                </Button>
+
+                <Button variant="contained" sx={{ mt: "2rem", width: "20rem",marginBottom:"20px",marginLeft:"20px" }} onClick={postData}>
+                    Publish 
+                </Button>
+                    </Box>
+         
+        </div>
+      </div>
+
+            {/* <Box style={{display: "flex", justifyContent: "center",alignItems:"center",width:"100%",height:"100%", }}>
 
             
             <Box
@@ -235,19 +326,7 @@ const CreateNotice = () => {
 
                     }
                 </FormControl>
-                
- 
-             
-
-             
-
-              
-
-
-                
-
-
-
+            
             <Box style={{ width: "100%", display: "flex", flexDirection: "column" ,marginLeft:"10px"}}>
                 <Button
                     component="label"
@@ -281,7 +360,7 @@ const CreateNotice = () => {
                 </Button>
                     </Box>
             </Box>
-            </Box>
+            </Box> */}
            
 
         </>

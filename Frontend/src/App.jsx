@@ -18,7 +18,9 @@ import {
   CreateAssignment,
   Admission,
   DisplayData,
-  CreateNotice
+  CreateNotice,
+  EditData,
+  CheckAttendence
 } from "./Pages/index.ts";
 import { Layout } from "./Components/Layout/index.ts";
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -44,7 +46,7 @@ function App() {
                   <Route path="/result" element={<Result />} />
                   <Route path="/notice" element={<Notice />} />
                   <Route path="/attendance" element={<Attendance />} />
-                  <Route path="/profile" element={<InstructorProfile />} />
+                  {/* <Route path="/profile" element={<InstructorProfile />} /> */}
                   <Route path="/batches" element={<Batches />} />
                  
                   <Route path="/assignments" element={<Assignments />} />
@@ -64,6 +66,8 @@ function App() {
               <Route path="/admission" element={<Admission/>}/>
               <Route path="/students" element={<DisplayData/>}/>
               <Route path="/notice" element={<Notice/>}/>
+              <Route path="/attendence" element={<CheckAttendence/>}/>
+              <Route path="/edit/:id" element={<EditData/>}/>
             </Routes>
             </Layout>
           }
