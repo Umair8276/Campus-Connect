@@ -28,7 +28,6 @@ const AttendanceList = ({date,subject,present,branch,sem,classes,data}) => {
   const [students,setStudents] = useState([])
   const [totalStudents,setTotalStudents] = useState("")
   const {user} = useContext(AppContext)
-  console.log("Data :",data)
  
   const handleClick = () => {
     setOpen(!open);

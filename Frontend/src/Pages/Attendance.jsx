@@ -1,46 +1,21 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Box, Button, Toolbar, Typography } from "@mui/material";
 import AttandanceList from "../Components/common/AttendanceList.jsx";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AppContext } from "../Context/AuthContext.jsx";
+import TextField from '@mui/material/TextField';
+import moment from 'moment';
 
-const attendance = [
-  {
-    date:'Mon 25th July 2023',
-    subject:'Data Structure & Alogorithm',
-    present:66,
-  },
-  {
-    date:'Tue 26th July 2023',
-    subject:'Data Structure & Alogorithm',
-    present:60,
-  },
-  {
-    date:'Wed 27th July 2023',
-    subject:'Data Structure & Alogorithm',
-    present:65,
-  },
-  {
-    date:'Thus 28th July 2023',
-    subject:'Data Structure & Alogorithm',
-    present:75,
-  },
-  {
-    date:'Fri 29th July 2023',
-    subject:'Data Structure & Alogorithm',
-    present:46,
-  },
-]
 const Attendance = () => {
   const {user} = useContext(AppContext);
   const [data,setData] = useState([])
   const navigate = useNavigate();
+  const [query,setQuery] = useState("")
   const getFacultyAttendence = () => {
      axios.get(`http://localhost:5000/api/att/getfacatt/${user._id}`)
      .then(res => {
-      console.log("Attendence ",res.data.facAtt)
       setData(res.data.facAtt)
      })
      .catch(err => {
@@ -50,6 +25,26 @@ const Attendance = () => {
   useEffect( () => {
     getFacultyAttendence()
   },[])
+  
+
+
+  const handleSearch = (e) => {
+    console.log(e.target.value)
+    let searchInp = e.target.value
+    // setQuery(e.target.value)
+    let filterData;
+    if(searchInp){
+       filterData = data.filter( (data) => {
+       return moment(data.createdAt).format('DD-MM-YYYY').includes(searchInp)
+     })
+    }
+    console.log("filterData" , filterData)
+    if(filterData?.length > 1)
+       setData(filterData)
+    else
+       getFacultyAttendence()
+       
+  }
 
   return (
     <>
@@ -65,6 +60,9 @@ const Attendance = () => {
           <Typography fontWeight={450} fontSize={35}>
             Attendance
           </Typography>
+    
+         
+          
           <Button
             sx={{
               marginLeft: "auto",
@@ -76,6 +74,18 @@ const Attendance = () => {
             Create
           </Button>
         </Toolbar>
+
+        <Box
+      component="form"
+      sx={{
+        '& > :not(style)': { ml: 1,width:"150ch"},
+      }}
+      noValidate
+      
+      autoComplete="off"
+    >
+      <TextField id="outlined-basic" label="Search by date"  variant="outlined" onKeyUp={(e) => {handleSearch(e)}} />
+    </Box>
         {
           data.map((attendance,index)=>(
             <AttandanceList 

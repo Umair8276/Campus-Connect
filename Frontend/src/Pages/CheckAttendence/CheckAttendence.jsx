@@ -26,6 +26,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
   import { useNavigate } from "react-router-dom";
   import axios from 'axios';
   import { AppContext } from "../../Context/AuthContext";
+  import { Oval } from 'react-loader-spinner';
 
 const CheckAttendence = () => {
     const [subject, setSubject] = React.useState("");
@@ -412,9 +413,16 @@ const CheckAttendence = () => {
                      {
                       percentage.length > 0
                       ?
-                       percentage[per].averagePercentage
+                       percentage[per].averagePercentage.toFixed(2)
                       :
-                      "Loading..."
+                      <Oval
+                    visible={true}
+                    height="30"
+                    width="30"
+                    color="#4fa94d"
+                   ariaLabel="oval-loading"
+                   
+                   />
                      }
                     </TableCell>
                     <TableCell component="th" scope="row">

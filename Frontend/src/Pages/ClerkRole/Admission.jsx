@@ -33,6 +33,8 @@ import { Formik, useFormik } from "formik";
 import { styled } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import * as Yup from "yup";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Form1 = () => {
   const admissionSchema = Yup.object().shape({
@@ -69,9 +71,8 @@ const Form1 = () => {
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [sem,setSem] = React.useState("")
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
+  const [disable,setDisable] = React.useState(true)
+
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -95,6 +96,7 @@ const Form1 = () => {
     oldEmail: "",
   };
 
+
   const {
     values,
     errors,
@@ -112,6 +114,29 @@ const Form1 = () => {
     },
   });
   const navigate = useNavigate();
+
+  const handleNext = () => {
+    console.log(activeStep)
+    if( activeStep == 0 && values.firstName && values.lastName && values.mobileNo && values.oldEmail && values.branch ){
+      setActiveStep((prevActiveStep ) => prevActiveStep + 1);
+     return 
+    }
+      
+      if( activeStep == 1 && values.adYear && values.gradYear && values.address && values.city && values.district ){
+        setActiveStep((prevActiveStep ) => prevActiveStep + 1);
+        return
+      }
+     
+    if( activeStep == 2 && values.pincode && values.state && values.ttFees && values.feesPaid && values.stu_class &&values.currentSem)
+    {
+      setActiveStep((prevActiveStep ) => prevActiveStep + 1);
+      return
+    }
+  
+  else 
+     toast.error("please enter all the Fields",{
+    autoClose:1500})
+  };
 
   const handleSubmitt = () => {
     console.log("Ziad", values,sem);
@@ -146,6 +171,7 @@ const Form1 = () => {
 
   return (
     <>
+    <ToastContainer/>
       <Box
         sx={{
           display: "flex",
@@ -747,7 +773,7 @@ const Form1 = () => {
                 {activeStep === steps.length - 1 ? (
                   <Button onClick={() => handleSubmitt()}>Finish</Button>
                 ) : (
-                  <Button onClick={handleNext}>Next</Button>
+                  <Button onClick={handleNext} >Next</Button>
                 )}
               </Box>
             </div>

@@ -25,6 +25,9 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { AppContext } from "../Context/AuthContext";
+import { Oval } from 'react-loader-spinner';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function createData(rollNumber, name) {
   return { rollNumber, name };
@@ -55,6 +58,7 @@ const CreateAttendance = () => {
   const {presentStudent,setPresentStudent,absentStu,setAbsentStu} = useContext(AppContext);
   const navigate = useNavigate();
   const [percentage,setPercentage] = useState([])
+  const [loading,setLoading] = useState(false)
 
   const [sub,setSub] = useState();
 
@@ -128,6 +132,7 @@ const CreateAttendance = () => {
   
   //  Find All Students Based on branch,class and sem
   const fetchStu = () => {
+    setLoading(true)
     axios.get(`http://localhost:5000/api/att/getstu/${branch}/${classes}/${sem}`)
     .then(res => {
       // Sort By Roll No
@@ -135,15 +140,16 @@ const CreateAttendance = () => {
       console.log("Students : ",res.data.students)
       setStudents(res.data.students)
       setTotalStudents(res.data.students.length)
+      setLoading(false)
     })
     .catch(err => {
       console.log(err)
     })
   }
 
-  useEffect( () => {
-    fetchStu()
-  },[subject])
+  // useEffect( () => {
+  //   fetchStu()
+  // },[subject])
 
    const markAttendence = () => {
       axios.post("http://localhost:5000/api/att/createatt",{
@@ -155,9 +161,17 @@ const CreateAttendance = () => {
          classes
       }).then(res => {
         console.log(res.data)
+        toast.success("Attendence Marked Successfully", {
+          autoClose: 2000, 
+        })
+        setTimeout( () => {
+          navigate("/faculty/attendance")
+        },2000)
+          
       }).catch(err => {
         console.log(err)
       })
+     
    }
 
   //  let arr = [];
@@ -204,6 +218,7 @@ const CreateAttendance = () => {
 
   return (
     <>
+    <ToastContainer/>
       <Box
         sx={{
           display: "flex",
@@ -383,6 +398,20 @@ const CreateAttendance = () => {
               Confirm
             </Button>
           </Stack>
+          {
+            loading &&
+            <div style={{marginTop:"100px",display:"flex",justifyContent:"center",alignItems:"center"}}>
+
+              <Oval
+              visible={true}
+              height="100"
+              width="100"
+              color="#4fa94d"
+             ariaLabel="oval-loading"
+           
+             />
+            </div>
+          }
 
           {
              students && students.length > 0 &&
@@ -465,7 +494,7 @@ const CreateAttendance = () => {
                     </TableCell>
 
                     <TableCell component="th" scope="row">
-                       {percentage[per]}
+                       {percentage[per].toFixed(2)}
                     </TableCell>
 
                   </TableRow>
