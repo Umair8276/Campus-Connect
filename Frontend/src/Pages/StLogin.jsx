@@ -42,7 +42,7 @@ const StLogin = () => {
     }
     axios
       .post("http://localhost:5000/api/stu/login", {
-        email,
+        oldEmail:email,
         password,
       })
       .then((res) => {

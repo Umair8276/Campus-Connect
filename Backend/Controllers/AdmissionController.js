@@ -91,10 +91,10 @@ const getAllStudent = async(req,res) => {
 }
 
 const studentLogin = async(req,res) => {
-    const {email,password} = req.body;
+    const {oldEmail,password} = req.body;
     let stLogin;
     try {
-     stLogin = await AdmissionModal.findOne({email});
+     stLogin = await AdmissionModal.findOne({oldEmail});
     } catch (error) {
       console.log(error)
     }

@@ -53,7 +53,8 @@ const Form1 = () => {
     feesPaid: Yup.number().required("Please Enter  Fees Paid"),
     stu_class: Yup.string().required("Please Enter Class"),
     crntSem: Yup.number().required("Please Enter Current Sem"),
-    oldEmail: Yup.string().required("Please Enter valid email"),
+    oldEmail: Yup.string().email('Invalid email address')
+    .required('Email is required'),
   });
 
   const VisuallyHiddenInput = styled("input")({

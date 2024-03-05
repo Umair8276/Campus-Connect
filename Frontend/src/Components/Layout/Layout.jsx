@@ -12,11 +12,6 @@ const Layout = ({ children }) => {
   //  },[])
   return (
     <Box display='flex'  height='100%'>
-      {/* {
-        url == "/clerk"
-        ?
-
-      } */}
       <Slider />
       <Header />
       <Box  sx={{

@@ -42,11 +42,11 @@ const Login = () => {
         },2000)
         return
       }
+      dispatch({type:"LOGIN" ,payload:res.data.user})
       toast.success("Login Successfully", {
         autoClose: 1500, 
       })
-      Cookies.set('token', res.data.token);
-      dispatch({type:"LOGIN" ,payload:res.data.user})
+      navigate("/")
      }).catch(err => {
       setError(err)
       console.log(err) 

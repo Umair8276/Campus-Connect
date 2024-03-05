@@ -28,6 +28,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { UserAuth } from "./Authentication/UserAuth";
 import { AppContext } from "./Context/AuthContext";
 import { Assignment } from "@mui/icons-material";
+import {CampusAccess,IsLoggedin,StudentAccess} from "./Authentication/UserAuth.jsx"
 
 function App() {
   const {user} = useContext(AppContext)
@@ -38,38 +39,46 @@ function App() {
         <Routes>
           <Route path="/" element={user && user.role ?  <UserAuth /> :  <Login />} />
           <Route path="/stlogin" element={ user && user.role ?  <UserAuth /> : <StLogin />} />
+          <Route path="/login" element={ <IsLoggedin><Login /></IsLoggedin>}/>
           <Route
             path="/faculty/*"
             element={
+              <CampusAccess>
               <Layout>
                 <Routes>
                   <Route path="/result" element={<Result />} />
-                  <Route path="/notice" element={<Notice />} />
-                  <Route path="/attendance" element={<Attendance />} />
+                  <Route path="/notice" element={
+                    <CampusAccess> <Notice /> </CampusAccess>
+                  } />
+                  <Route path="/attendance" element={<CampusAccess><Attendance /></CampusAccess>} />
                   {/* <Route path="/profile" element={<InstructorProfile />} /> */}
                   <Route path="/batches" element={<Batches />} />
                  
-                  <Route path="/assignments" element={<Assignments />} />
-                  <Route path="/createnotice" element={<CreateNotice />} />
-                  <Route path="/create-attendance" element={<CreateAttendance />} />
-                  <Route path="/create-assignment" element={<CreateAssignment />} />
+                  <Route path="/assignments" element={<CampusAccess><Assignment/></CampusAccess>} />
+                  <Route path="/createnotice" element={<CampusAccess><CreateNotice /></CampusAccess>} />
+                  <Route path="/create-attendance" element={<CampusAccess><CreateAttendance /></CampusAccess>} />
+                  <Route path="/create-assignment" element={<CampusAccess><CreateAssignment /></CampusAccess>} />
                 </Routes>
               </Layout>
+              </CampusAccess>
+        
             }
           />
        
           <Route 
           path="/clerk/*"
           element={
+            <CampusAccess>
             <Layout>
             <Routes>
-              <Route path="/admission" element={<Admission/>}/>
-              <Route path="/students" element={<DisplayData/>}/>
-              <Route path="/notice" element={<Notice/>}/>
-              <Route path="/attendence" element={<CheckAttendence/>}/>
-              <Route path="/edit/:id" element={<EditData/>}/>
+              <Route path="/admission" element={<CampusAccess><Admission/></CampusAccess>}/>
+              <Route path="/students" element={<CampusAccess><DisplayData/></CampusAccess>}/>
+              <Route path="/notice" element={<CampusAccess><Notice/></CampusAccess>}/>
+              <Route path="/attendence" element={<CampusAccess><CheckAttendence/></CampusAccess>}/>
+              <Route path="/edit/:id" element={<CampusAccess><EditData/></CampusAccess>}/>
             </Routes>
             </Layout>
+            </CampusAccess>
           }
 
           />
@@ -79,7 +88,7 @@ function App() {
           element={
             <Layout>
             <Routes>
-              <Route path="/admission" element={Admission}/>
+              <Route path="/admission" element={<CampusAccess><Admission/></CampusAccess>}/>
             </Routes>
             </Layout>
           }
@@ -88,13 +97,15 @@ function App() {
           <Route 
           path="/student/*"
           element={
+            <StudentAccess>
             <Layout>
             <Routes>
-              <Route path="/admission" element={<Admission/>}/>
+              <Route path="/attendance" element={<Admission/>}/>
               <Route path="/assignments" element={<Assignments/>}/>
               <Route path="/notice" element={<Notice/>}/>
             </Routes>
             </Layout>
+            </StudentAccess>
           }
 
           />

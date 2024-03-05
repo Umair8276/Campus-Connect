@@ -4,10 +4,48 @@ import { useNavigate } from 'react-router-dom';
 import Slider from './../Components/Layout/Slider';
 import Login from './../Pages/Login';
 
-export const UserAuth = () => {
+export const IsLoggedin = ({children}) => {
     const { user } = useContext(AppContext);
+    const navigate = useNavigate()
+     if(!user || !user.role)
+       return children;
+    else{
+       return <>You Already Logged In to the App
+       <button onClick={() => navigate(-1)}>go back</button>
+       </>
+    }
+}
+
+export const CampusAccess = ({children}) => {
+    const { user } = useContext(AppContext);
+    const navigate = useNavigate()
+    if(user && (user.role == "admin" || user.role == "clerk" || user.role == "faculty" )){
+        return children;
+    }
+    else{
+        return <>You Dont Have an Access
+         <button onClick={() => navigate(-1)}>go back</button>
+        </>
+    }
+}
+
+export const StudentAccess = ({children}) => {
+    const { user } = useContext(AppContext);
+    const navigate = useNavigate()
+    if(user && user.role == "student"){
+        return children;
+    }
+    else{
+        return <>You Dont Have an Access
+         <button onClick={() => navigate(-1)}>go back</button>
+        </>
+    }
+}
+
+export const UserAuth = () => {
     const navigate = useNavigate();
-   
+    const { user } = useContext(AppContext);
+
     return(
         <>
            {
