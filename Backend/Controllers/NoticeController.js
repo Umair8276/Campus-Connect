@@ -13,11 +13,11 @@ const createNotice = async(req,res) => {
 
 // Get Student Notice 
 const getNotice = async(req,res) => {
-    let  {branch,classes} = req.params;
+    let {branch,classes} = req.params;
     // console.log(req.params)
     let notice;
     try {
-        notice = await noticeModal.find({branch,class:classes })
+        notice = await noticeModal.find({branch,classes })
     } catch (error) {
         console.log(error)
     }

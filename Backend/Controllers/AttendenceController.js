@@ -122,7 +122,7 @@ const calcOverAllPercentage = async (req, res) => {
 
 
 const sendEmail = async(req,res) => {
-    const {email} = req.body;
+    const {email,attendence} = req.body;
       // Sending Mail to the user
       const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -135,9 +135,9 @@ const sendEmail = async(req,res) => {
     const mailOptions = {
         from: 'szaid9564@gmail.com',
         to: email,
-        subject: 'Attendence',
+        subject: 'Low Attendence',
         html: `
-            <p>Your Attendence Percentage is too low</p>
+            <p>Your Attendence Percentage is ${attendence}% . Maintain Your Attendence otherwise i'll not allowed you to sit in the exam</p>
         `
     };
 

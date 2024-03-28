@@ -272,7 +272,7 @@ const AssignmentCard = ({
     console.log(id)
     axios.delete(`http://localhost:5000/api/ass/deleteass/${id}`)
     .then(res => console.log(res.data))
-    .catch(err => console.log(err))
+    .catch(err => console.log(err));
   }
 
   return (
@@ -311,7 +311,7 @@ const AssignmentCard = ({
             user.role!="student" &&
           <>
                <div style={{display:"flex",gap:"10px"}}>
-          <DeleteIcon style={{color:"red",cursor:"pointer"}} onClick={()=>deleteNotice(notices._id)}/>
+          <DeleteIcon style={{color:"red",cursor:"pointer"}} onClick={()=>deleteAss(id)}/>
           <EditNoteIcon style={{color:"green",cursor:"pointer"}} onClick={() =>navigate(`/faculty/editassgn/${id}`) }/>
             </div>
           </>

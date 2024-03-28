@@ -16,10 +16,10 @@ export const IsLoggedin = ({children}) => {
     }
 }
 
-export const CampusAccess = ({children}) => {
+export const FacultyAccess = ({children}) => {
     const { user } = useContext(AppContext);
     const navigate = useNavigate()
-    if(user && (user.role == "admin" || user.role == "clerk" || user.role == "faculty" )){
+    if(user && user.role == "faculty" ){
         return children;
     }
     else{
@@ -33,6 +33,18 @@ export const StudentAccess = ({children}) => {
     const { user } = useContext(AppContext);
     const navigate = useNavigate()
     if(user && user.role == "student"){
+        return children;
+    }
+    else{
+        return <>You Dont Have an Access
+         <button onClick={() => navigate(-1)}>go back</button>
+        </>
+    }
+}
+export const ClerkAccess = ({children}) => {
+    const { user } = useContext(AppContext);
+    const navigate = useNavigate()
+    if(user && user.role == "clerk"){
         return children;
     }
     else{

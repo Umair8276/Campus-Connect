@@ -497,7 +497,7 @@ const CreateAttendance = () => {
                   <TableCell>Roll Number</TableCell>
                   <TableCell>Student Name</TableCell>
                   <TableCell>Attendance</TableCell>
-                  <TableCell>Percentage</TableCell>
+                  {/* <TableCell>Percentage</TableCell> */}
                  
                  
                 </TableRow>
@@ -521,9 +521,9 @@ const CreateAttendance = () => {
                       <MaintainAttendance branch = {branch} classes = {classes} subject = {subject} sem = {sem} studentId = {stu._id} facultyId = {user._id}   />
                     </TableCell>
 
-                    <TableCell component="th" scope="row">
+                    {/* <TableCell component="th" scope="row">
                        {percentage[per]?.toFixed(2)}
-                    </TableCell>
+                    </TableCell> */}
 
                   </TableRow>
                 ))}

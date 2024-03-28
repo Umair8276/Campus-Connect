@@ -44,6 +44,8 @@ const NoticeCard = () => {
       console.log(err)
     })
   }
+
+  // Get Notice in student side
   const getStuNotice = () => {
     axios.get(`http://localhost:5000/api/notice/getnotice/${user.branch}/${user.stu_class}`)
     .then(res => {
@@ -126,7 +128,7 @@ const NoticeCard = () => {
             user.role!="student" &&
             <div style={{display:"flex",gap:"10px"}}>
           <DeleteIcon style={{color:"red",cursor:"pointer"}} onClick={()=>deleteNotice(notices._id)}/>
-          <EditNoteIcon style={{color:"green",cursor:"pointer"}} onClick={() =>navigate(`/faculty/editnotice/${notices._id}`) }/>
+          <EditNoteIcon style={{color:"green",cursor:"pointer"}} onClick={() =>{ user.role == "faculty" ?  navigate(`/faculty/editnotice/${notices._id}`) : navigate(`/clerk/editnotice/${notices._id}`)} }/>
             </div>
           }
 
