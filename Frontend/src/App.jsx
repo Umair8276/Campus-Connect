@@ -20,14 +20,16 @@ import {
   DisplayData,
   CreateNotice,
   EditData,
-  CheckAttendence
+  CheckAttendence,
+  StudentProfile,
+  EditNotice,
+  EditAssgn
 } from "./Pages/index.ts";
 import { Layout } from "./Components/Layout/index.ts";
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { UserAuth } from "./Authentication/UserAuth";
 import { AppContext } from "./Context/AuthContext";
-import { Assignment } from "@mui/icons-material";
 import {CampusAccess,IsLoggedin,StudentAccess} from "./Authentication/UserAuth.jsx"
 
 function App() {
@@ -38,7 +40,7 @@ function App() {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Routes>
           <Route path="/" element={user && user.role ?  <UserAuth /> :  <Login />} />
-          <Route path="/stlogin" element={ user && user.role ?  <UserAuth /> : <StLogin />} />
+          <Route path="/stlogin" element={  <StLogin />} />
           <Route path="/login" element={ <IsLoggedin><Login /></IsLoggedin>}/>
           <Route
             path="/faculty/*"
@@ -54,10 +56,12 @@ function App() {
                   {/* <Route path="/profile" element={<InstructorProfile />} /> */}
                   <Route path="/batches" element={<Batches />} />
                  
-                  <Route path="/assignments" element={<CampusAccess><Assignment/></CampusAccess>} />
+                  <Route path="/assignments" element={<CampusAccess><Assignments/></CampusAccess>} />
                   <Route path="/createnotice" element={<CampusAccess><CreateNotice /></CampusAccess>} />
                   <Route path="/create-attendance" element={<CampusAccess><CreateAttendance /></CampusAccess>} />
                   <Route path="/create-assignment" element={<CampusAccess><CreateAssignment /></CampusAccess>} />
+                  <Route path="/editnotice/:id" element={<CampusAccess><EditNotice /></CampusAccess>} />
+                  <Route path="/editassgn/:id" element={<CampusAccess><EditAssgn /></CampusAccess>} />
                 </Routes>
               </Layout>
               </CampusAccess>
@@ -100,9 +104,10 @@ function App() {
             <StudentAccess>
             <Layout>
             <Routes>
-              <Route path="/attendance" element={<Admission/>}/>
+              {/* <Route path="/attendance" element={<Admission/>}/> */}
               <Route path="/assignments" element={<Assignments/>}/>
               <Route path="/notice" element={<Notice/>}/>
+              <Route path="/profile" element={<StudentProfile/>}/>
             </Routes>
             </Layout>
             </StudentAccess>

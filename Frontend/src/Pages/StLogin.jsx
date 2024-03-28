@@ -59,6 +59,7 @@ const StLogin = () => {
           autoClose: 1500,
         });
         dispatch({ type: "LOGIN", payload: res.data.user });
+        navigate("/")
       })
       .catch((err) => {
         setError(err);
@@ -75,7 +76,7 @@ const StLogin = () => {
           <img src={bg} />
           <div style={{padding:"10px",position:"absolute",top:"100px",left:"400px",}}>
        <h5 style={{fontSize:"14px",fontWeight:"500"}}> Are you a Faculty ? Click Below to login </h5>
-          <button className="btn transparent" id="sign-up-btn" style={{border:"2px solid #5995fd",marginTop:"20px",marginLeft:"40px",color:"#5995fd",fontWeight:"bold"}} id="sign-up-btn" onClick={() =>{
+          <button className="btn transparent" id="sign-up-btn" style={{border:"2px solid #5995fd",marginTop:"20px",marginLeft:"40px",color:"#5995fd",fontWeight:"bold"}}  onClick={() =>{
             navigate("/")
             // setBtn("sign-up-mode")
             }}>

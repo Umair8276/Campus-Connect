@@ -37,13 +37,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Form1 = () => {
+  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
   const admissionSchema = Yup.object().shape({
     firstName: Yup.string().min(4).max(30).required("Please Enter FirstName"),
     lastName: Yup.string().min(4).max(30).required("Please Enter lastName"),
     Branch: Yup.string().required("Please Enter Branch"),
     adYear: Yup.number().required("Please Enter Admission Year"),
     gradYear: Yup.number().required("Please Enter Graduation Year"),
-    mobileNo: Yup.number().required("Please Enter Mobile No"),
+    mobileNo: Yup.string().matches(phoneRegExp, 'Phone number is not valid').min(10, "too short").max(10, "too long"),
     address: Yup.string().min(5).max(34).required("Please Enter address"),
     state: Yup.string().min(4).max(15).required("Please Enter state"),
     district: Yup.string().min(4).max(15).required("Please Enter district"),
@@ -117,26 +119,7 @@ const Form1 = () => {
   const navigate = useNavigate();
 
   const handleNext = () => {
-    console.log(activeStep)
-    if( activeStep == 0 && values.firstName && values.lastName && values.mobileNo && values.oldEmail && values.branch ){
-      setActiveStep((prevActiveStep ) => prevActiveStep + 1);
-     return 
-    }
-      
-      if( activeStep == 1 && values.adYear && values.gradYear && values.address && values.city && values.district ){
-        setActiveStep((prevActiveStep ) => prevActiveStep + 1);
-        return
-      }
-     
-    if( activeStep == 2 && values.pincode && values.state && values.ttFees && values.feesPaid && values.stu_class &&values.currentSem)
-    {
-      setActiveStep((prevActiveStep ) => prevActiveStep + 1);
-      return
-    }
-  
-  else 
-     toast.error("please enter all the Fields",{
-    autoClose:1500})
+    setActiveStep((prevActiveStep ) => prevActiveStep + 1);
   };
 
   const handleSubmitt = () => {

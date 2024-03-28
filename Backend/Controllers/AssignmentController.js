@@ -165,6 +165,38 @@ const reUpload = async(req,res) => {
       return res.send({err:"Something went wrong"})
 }
 
+const deleteAss = async(req,res) => {
+    let deleteAssignment;
+    try {
+        deleteAssignment = await assignmentModal.findByIdAndDelete(req.params.id)
+    } catch (error) {
+        console.log(error)
+    }
+    if(deleteAssignment)
+       return res.send({msg:"Assignment Deleted Successfully"})
+    return res.send({err:"Something went wrong"})
+}
+
+const updateAss = async (req,res) => {
+    let assignment;
+     try { 
+       assignment = await assignmentModal.findByIdAndUpdate(req.params.id,{
+         $set:req.body
+       },{
+        new:true
+       })
+     } catch (error) {
+        console.log(error)
+     }
+     if(assignment)
+       return res.send({assignment})
+    else
+      return res.send({err:"Something went Wrong"})
+}
+
+
+
+
 exports.createAssignment = createAssignment
 // exports.AssignmentUpload = AssignmentUpload
 exports.getAssignmentById = getAssignmentById
@@ -176,3 +208,5 @@ exports.getAssByBranch = getAssByBranch
 exports.sendComment = sendComment
 exports.getUserAssignment = getUserAssignment
 exports.reUpload = reUpload
+exports.deleteAss = deleteAss
+exports.updateAss = updateAss

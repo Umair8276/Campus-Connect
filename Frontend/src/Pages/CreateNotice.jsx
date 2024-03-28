@@ -73,7 +73,7 @@ const CreateNotice = () => {
         axios.post("http://localhost:5000/api/notice/createnotice",{
             file,
             content,
-            class:classes,
+            classes,
             branch,
             faculty:user._id,
             sem

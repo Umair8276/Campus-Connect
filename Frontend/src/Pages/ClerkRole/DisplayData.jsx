@@ -58,13 +58,15 @@ const DisplayData = () => {
   const [rollNo,setRollNo] = useState("")
   const [data,setData] = useState([])
   const navigate = useNavigate();
+  const [endYear, setEndyear] = React.useState("");
 
   const getData = () => {
     console.log(branch,stu_class,rollNo)
     axios.post("http://localhost:5000/api/stu/search",{
      branch,
      stu_class,
-     rollNo
+     rollNo,
+     endYear
     }).then(res => {
       console.log(res.data)
       setData(res.data.student)
@@ -118,6 +120,33 @@ const DisplayData = () => {
             <MenuItem value="BE">BE</MenuItem>
           </Select>
         </FormControl>
+
+        
+        <FormControl
+              sx={{
+                width: "40%",
+              }}
+            >
+              <InputLabel id="endYear">Batch</InputLabel>
+              <Select
+                    labelId="EndYear"
+                    value={endYear}
+                    label="endYear"
+                    onChange={(e) => setEndyear(e.target.value)}
+              >
+                 <MenuItem value="2020">2020 </MenuItem>
+                 <MenuItem value="2021">2021 </MenuItem>
+                 <MenuItem value="2022">2022 </MenuItem>
+                 <MenuItem value="2023">2023 </MenuItem>
+                 <MenuItem value="2024">2024 </MenuItem>
+                 <MenuItem value="2025">2025</MenuItem>
+                 <MenuItem value="2026">2026</MenuItem>
+                 <MenuItem value="2027">2027</MenuItem>
+                 <MenuItem value="2028">2028</MenuItem>
+                 <MenuItem value="2029">2029</MenuItem>
+                 <MenuItem value="2030">2030</MenuItem>
+                  </Select>
+            </FormControl>
 
       
         <Button variant="contained" onClick={() => getData()}>Search</Button>

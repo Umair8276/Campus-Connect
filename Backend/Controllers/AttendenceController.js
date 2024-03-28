@@ -1,6 +1,7 @@
 const attendenceModal = require("../Modals/AttendenceModal")
 const studentModal = require("../Modals/AdmissionModal")
 const attendencePerc = require("../Modals/AttendencePercModal")
+const nodemailer = require("nodemailer");
 
 const createAttendence = async(req,res) => {
    const newAttendence = new attendenceModal(req.body)
@@ -34,10 +35,11 @@ const createAttendence = async(req,res) => {
 
   //  Find Total Students of particular branch
   const fetchStudents = async(req,res) => {
-   const {branch,stu_class,currentSem} = req.params;
+   const {branch,stu_class,currentSem,endYear} = req.params;
+   console.log(req.params)
     let students;
     try {
-      students = await studentModal.find({branch,stu_class,currentSem})
+      students = await studentModal.find({branch,stu_class,currentSem,endYear})
     } catch (error) {
       console.log(error)
     }
@@ -79,8 +81,10 @@ const getFacAttendence = async(req,res) => {
 
 
 const calcOverAllPercentage = async (req, res) => {
+  let {batch} = req.body
   try {
-    const students = await studentModal.find(); // Assuming you have a Admission model
+    const students = await studentModal.find({endYear:batch}); // Assuming you have a Admission model
+    // console.log(students)
 
     const attendancePercentages = [];
 
@@ -109,6 +113,7 @@ const calcOverAllPercentage = async (req, res) => {
     }
 
     return res.send({ attendancePercentages });
+    console.log(attendancePercentages)
   } catch (err) {
     console.log(err);
     return res.send({ error: 'Internal Server Error' });
@@ -116,50 +121,38 @@ const calcOverAllPercentage = async (req, res) => {
 };
 
 
+const sendEmail = async(req,res) => {
+    const {email} = req.body;
+      // Sending Mail to the user
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'szaid9564@gmail.com',
+            pass: 'g u a g r k p z i v o g n c q r'
+        }
+    });
 
+    const mailOptions = {
+        from: 'szaid9564@gmail.com',
+        to: email,
+        subject: 'Attendence',
+        html: `
+            <p>Your Attendence Percentage is too low</p>
+        `
+    };
 
-// const calcOverAllPercentage = async (req, res) => {
-//   try {
-//     // Extract subjects array from the request body
-//     const { subjects } = req.body;
-
-//     // Validate subjects
-//     if (!Array.isArray(subjects) || subjects.length === 0) {
-//       return res.status(400).send({ error: 'Subjects must be provided as a non-empty array' });
-//     }
-
-//     // Fetch all attendance records for the specified subjects
-//     const allAttendances = await attendenceModal.find({ subject: { $in: subjects } });
-
-//     // Create an object to store attendance percentages for each student
-//     const attendancePercentages = {};
-
-//     // Process attendance data
-//     allAttendances.forEach(attendance => {
-//       const { studentId, attended } = attendance;
-//       if (!attendancePercentages[studentId]) {
-//         attendancePercentages[studentId] = { totalLectures: 0, totalAttended: 0 };
-//       }
-//       attendancePercentages[studentId].totalLectures++;
-//       if (attended) {
-//         attendancePercentages[studentId].totalAttended++;
-//       }
-//     });
-
-//     // Calculate average attendance percentage for each student
-//     for (const studentId in attendancePercentages) {
-//       const { totalLectures, totalAttended } = attendancePercentages[studentId];
-//       const averagePercentage = totalLectures !== 0 ? (totalAttended / totalLectures) * 100 : 0;
-//       attendancePercentages[studentId].averagePercentage = averagePercentage;
-//     }
-
-//     // Respond with the calculated attendance percentages for each student
-//     return res.send({ attendancePercentages });
-//   } catch (err) {
-//     console.error(err);
-//     return res.status(500).send({ error: 'Internal Server Error' });
-//   }
-// };
+  
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error(error);
+            res.status(500).json({ success: false, message: 'Failed to send email' });
+        } else {
+            console.log('Email sent: ' + info.response);
+            res.status(200).json({ success: true, message: 'Email sent successfully' });
+        }
+    });
+    res.send({msg:"mail sent successfully"})
+}
 
 
 
@@ -171,5 +164,6 @@ exports.getAttendence = getAttendence
 exports.fetchStudents = fetchStudents     
 exports.getFacAttendence = getFacAttendence     
 exports.calcOverAllPercentage = calcOverAllPercentage     
+exports.sendEmail = sendEmail     
 
 

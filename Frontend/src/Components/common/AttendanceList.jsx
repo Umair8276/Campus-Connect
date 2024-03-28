@@ -22,7 +22,7 @@ import moment from 'moment';
 import axios from "axios"
 import { AppContext } from "../../Context/AuthContext";
 
-const AttendanceList = ({date,subject,present,branch,sem,classes,data}) => {
+const AttendanceList = ({date,subject,present,branch,sem,classes,data,batch}) => {
   const [open, setOpen] = React.useState(false);
   const absent = 75 - present;
   const [students,setStudents] = useState([])
@@ -61,7 +61,7 @@ const AttendanceList = ({date,subject,present,branch,sem,classes,data}) => {
   ];
 
   const fetchStu = () => {
-    axios.get(`http://localhost:5000/api/att/getstu/${branch}/${classes}/${sem}`)
+    axios.get(`http://localhost:5000/api/att/getstu/${branch}/${classes}/${sem}/${batch}`)
     .then(res => {
       // Sort By Roll No
       res.data.students.sort((a, b) => a.rollNo - b.rollNo);

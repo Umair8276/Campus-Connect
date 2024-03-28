@@ -32,7 +32,8 @@ const Slider = ({role}) => {
   const [openHomeDrawer, setHomeOpenDrawer] = useState(false);
   const navigate = useNavigate();
   const location = useLocation()
-  const {dispatch} = useContext(AppContext)
+  const {dispatch,selectedIndex,setSelectedIndex} = useContext(AppContext)
+  const [currIndex,setCurrIndex] = useState(0)
 
  
   
@@ -56,14 +57,15 @@ const Slider = ({role}) => {
    
   },[menu])
 
-  useEffect( () => {
-    console.log(role)
-  },[])
+  // useEffect( () => {
+  //   console.log(role,menu[0].path)
+  // },[menu])
  
   
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  // const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   const handleListItemClick = (event, index) => {
+    localStorage.setItem("selectedIndex",index)
     setSelectedIndex(index);
   };
 
@@ -71,6 +73,16 @@ const Slider = ({role}) => {
     dispatch({type:"LOGOUT"})
     navigate("/")
   }
+  useEffect(() => {
+    if (menu.length > 0) {
+        // Navigate to the first menu item
+        navigate(menu[0].path);
+    }
+
+}, [menu]);
+
+
+
   return  (
     <>
       <Drawer
@@ -113,10 +125,11 @@ const Slider = ({role}) => {
                   borderRadius: "12px",
                   padding: "1rem",
                   color: selectedIndex === index ? "#2C62EE" : null,
-                  bgcolor: selectedIndex === index ? "#ECF1FF" : null,
+                  // bgcolor: selectedIndex === currIndex ? "#ECF1FF" : null,
                   width: "10rem",
                 }}
                 key={index}
+                onChange={(e) => console.log(e.target.value)}
                 onClick={(event) => {
                   handleListItemClick(event, index);
                   navigate(menu.path, { replace: true });

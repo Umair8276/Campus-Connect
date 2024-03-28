@@ -12,7 +12,8 @@ import {
   import FormControl from "@mui/material/FormControl";
   import Select from "@mui/material/Select";
 
-  
+  import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Stack } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -38,6 +39,7 @@ const CheckAttendence = () => {
     const {user} = useContext(AppContext)
     const {presentStudent,setPresentStudent,absentStu,setAbsentStu} = useContext(AppContext);
     const navigate = useNavigate();
+    const [endYear, setEndyear] = React.useState("");
     const [percentage,setPercentage] = useState([])
     const [sub,setSub] = useState();
 
@@ -113,7 +115,7 @@ const CheckAttendence = () => {
       
       //  Find All Students Based on branch,class and sem
       const fetchStu = () => {
-        axios.get(`http://localhost:5000/api/att/getstu/${branch}/${classes}/${sem}`)
+        axios.get(`http://localhost:5000/api/att/getstu/${branch}/${classes}/${sem}/${endYear}`)
         .then(res => {
           // Sort By Roll No
           res.data.students.sort((a, b) => a.rollNo - b.rollNo);
@@ -159,20 +161,36 @@ const CheckAttendence = () => {
    const calcOverAllPercentage = () => {
      console.log(sub.subjects)
      axios.post("http://localhost:5000/api/att/calperc",{
-       subjects:sub.subjects
+       subjects:sub.subjects,
+       batch:endYear
      }).then(res => {
-       console.log(res.data.attendancePercentages[0])
+       console.log(res.data.attendancePercentages)
        setPercentage(res.data.attendancePercentages)
      }).catch(err => {
        console.log(err)
+     })
+  }
+ 
+  const sendMail = (email) => {
+    console.log(email)
+     axios.post("http://localhost:5000/api/att/sendmail",{
+       email
+     })
+     .then(res => {
+      console.log(res.data)
+      toast.success("mail send Successfully", {
+        autoClose: 2000, 
+      })
+     }).catch(err => {
+      console.log(err)
      })
   }
     
 
 
   return (
- <>
-<Box  sx={{
+    <>
+     <Box  sx={{
           display: "flex",
           gap: 3,
           flexDirection: "column",
@@ -312,7 +330,31 @@ const CheckAttendence = () => {
                     }
                     </FormControl>
  
-             
+                    <FormControl
+              sx={{
+                width: "40%",
+              }}
+            >
+              <InputLabel id="endYear">Batch</InputLabel>
+              <Select
+                    labelId="EndYear"
+                    value={endYear}
+                    label="endYear"
+                    onChange={(e) => setEndyear(e.target.value)}
+              >
+                 <MenuItem value="2020">2020 </MenuItem>
+                 <MenuItem value="2021">2021 </MenuItem>
+                 <MenuItem value="2022">2022 </MenuItem>
+                 <MenuItem value="2023">2023 </MenuItem>
+                 <MenuItem value="2024">2024 </MenuItem>
+                 <MenuItem value="2025">2025</MenuItem>
+                 <MenuItem value="2026">2026</MenuItem>
+                 <MenuItem value="2027">2027</MenuItem>
+                 <MenuItem value="2028">2028</MenuItem>
+                 <MenuItem value="2029">2029</MenuItem>
+                 <MenuItem value="2030">2030</MenuItem>
+                  </Select>
+            </FormControl>
 
             {/* <FormControl
               sx={{
@@ -409,11 +451,11 @@ const CheckAttendence = () => {
                       <MaintainAttendance branch = {branch} classes = {classes} subject = {subject} sem = {sem} studentId = {stu._id} facultyId = {user._id}   />
                     </TableCell> */}
 
-                    <TableCell component="th" scope="row" style={{color:percentage && percentage[per]?.averagePercentage < 75 ? "red" : ""}}>
+                    <TableCell component="th" scope="row" style={{color:percentage && percentage[per]?.averagePercentage < 75 ? "red" : "green"}}>
                      {
                       percentage.length > 0
                       ?
-                       percentage[per].averagePercentage.toFixed(2)
+                       percentage[per].averagePercentage?.toFixed(2) +  "%"
                       :
                       <Oval
                     visible={true}
@@ -426,7 +468,7 @@ const CheckAttendence = () => {
                      }
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      <Button varient = "contained">Send Mail</Button>
+                      <Button varient = "contained" onClick={() => sendMail(stu.oldEmail)} disabled={ percentage[per]?.averagePercentage < "75" ? false : true}>Send Mail</Button>
                     </TableCell>
 
                   </TableRow>

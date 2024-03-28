@@ -17,12 +17,13 @@ const Admission = async (req, res) => {
     // Finding Total COunt of a Student than Allocating Roll No
     let total_count;
     try {
-        total_count = await AdmissionModal.find({branch,endYear}).count()
+        total_count = await AdmissionModal.find({stu_class,branch,endYear,currentSem}).count()
     } catch (error) {
         console.log(error)
     }
     let roll_No = total_count == 0 ?  1 : total_count + 1
     let generateEmail = startYear.substring(0,2) + branch.substring(0,2).toUpperCase() + (roll_No > 9 ? roll_No : `0${roll_No}`) + `@gmail.com`;
+    let newPass = firstName+endYear;
     //New Admission
     const newAdmission = new AdmissionModal({
         firstName,
@@ -43,7 +44,8 @@ const Admission = async (req, res) => {
         currentSem,
         rollNo: roll_No,
         oldEmail,
-        newEmail:generateEmail 
+        newEmail:generateEmail ,
+        password:newPass
     });
  
     try {
@@ -54,28 +56,78 @@ const Admission = async (req, res) => {
     }
     res.send({ newAdmission })
 
+
+    // const {email} = req.body;
     // Sending Mail to the user
     const transporter = nodemailer.createTransport({
-        host: 'smtp.ethereal.email',
-        port: 587,
-        auth: {
-            user: 'alexis.kuvalis83@ethereal.email',
-            pass: 'hy9usGqbXET3zgR4UW'
-        }
-    });
+      service: 'gmail',
+      auth: {
+          user: 'szaid9564@gmail.com',
+          pass: 'g u a g r k p z i v o g n c q r'
+      }
+  });
+
+  const mailOptions = {
+      from: 'szaid9564@gmail.com',
+      to: oldEmail,
+      subject: 'Your Username and Password',
+      html: `
+          <p>Here are your login credentials:</p>
+          <p><strong>Email: ${generateEmail}</strong></p>
+          <p><strong>Password: ${newPass}</strong> </p>
+      `
+  };
+
+
+  transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+          console.error(error);
+          res.status(500).json({ success: false, message: 'Failed to send email' });
+      } else {
+          console.log('Email sent: ' + info.response);
+          res.status(200).json({ success: true, message: 'Email sent successfully' });
+      }
+  });
+
+   
+}
+
+// const sendEmail = async(req,res) => {
+//     const {email} = req.body;
+//       // Sending Mail to the user
+//       const transporter = nodemailer.createTransport({
+//         service: 'gmail',
+//         auth: {
+//             user: 'szaid9564@gmail.com',
+//             pass: 'g u a g r k p z i v o g n c q r'
+//         }
+//     });
+
+//     const mailOptions = {
+//         from: 'szaid9564@gmail.com',
+//         to: email,
+//         subject: 'Your Username and Password',
+//         html: `
+//             <p>Here are your login credentials:</p>
+//             <p><strong>Username:</strong></p>
+//             <p><strong>Password:</strong> </p>
+//         `
+//     };
 
   
-        // send mail with defined transport object
-        const info = await transporter.sendMail({
-          from: '"Fred Foo 👻" <szaid9564@gmail.co>', // sender address
-          to: "mzaid4144@gmail.com", // list of receivers
-          subject: "Hello ✔", // Subject line
-          text: "Hello world?", // plain text body
-          html: "<b>Hello world?</b>", // html body
-        });
-        console.log(info)
-        res.json(info);
-}
+//     transporter.sendMail(mailOptions, (error, info) => {
+//         if (error) {
+//             console.error(error);
+//             res.status(500).json({ success: false, message: 'Failed to send email' });
+//         } else {
+//             console.log('Email sent: ' + info.response);
+//             res.status(200).json({ success: true, message: 'Email sent successfully' });
+//         }
+//     });
+// }
+
+  
+
 
 const getAllStudent = async(req,res) => {
     let student;
@@ -94,7 +146,7 @@ const studentLogin = async(req,res) => {
     const {oldEmail,password} = req.body;
     let stLogin;
     try {
-     stLogin = await AdmissionModal.findOne({oldEmail});
+     stLogin = await AdmissionModal.findOne({newEmail:oldEmail});
     } catch (error) {
       console.log(error)
     }
@@ -112,11 +164,11 @@ else{
 
 //   search student by class and branch
 const SearchStudent  = async(req,res) => {
-    const {branch,stu_class,rollNo} = req.body;
+    const {branch,stu_class,rollNo,endYear} = req.body;
     console.log(req.body)
     let student;
     try{
-      student = await AdmissionModal.find({branch,stu_class,rollNo})
+      student = await AdmissionModal.find({branch,stu_class,rollNo,endYear})
     }
     catch(err)  {
         console.log(err);
@@ -127,10 +179,42 @@ const SearchStudent  = async(req,res) => {
     else{
         return res.send({err:"Something went Wrong"})
     }
-   
+}
+
+const updateStudent = async (req,res) => {
+    let student;
+     try { 
+       student = await AdmissionModal.findByIdAndUpdate(req.params.id,{
+         $set:req.body
+       },{
+        new:true
+       })
+     } catch (error) {
+        console.log(error)
+     }
+     if(student)
+       return res.send({student})
+    else
+      return res.send({err:"Something went Wrong"})
+}
+
+const getSingleStudent = async(req,res) => {
+    let student;
+    try {
+         student = await AdmissionModal.findById(req.params.id)
+    } catch (error) {
+        console.log(error)
+    }
+    if(student)
+      res.send({student})
+    else
+      res.send({err:"Something went Wrong"})
 }
 
 exports.Admission = Admission;
 exports.getAllStudent = getAllStudent;
 exports.studentLogin = studentLogin;
 exports.SearchStudent = SearchStudent;
+exports.updateStudent = updateStudent;
+exports.getSingleStudent = getSingleStudent;
+

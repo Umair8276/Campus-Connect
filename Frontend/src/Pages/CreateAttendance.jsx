@@ -52,6 +52,7 @@ const CreateAttendance = () => {
   const [classes,setClasses] = useState("")
   const [branch, setBranch] = React.useState("");
   const [sem, setSem] = React.useState("");
+  const [endYear, setEndyear] = React.useState("");
   const [students,setStudents] = useState([])
   const [totalStudents,setTotalStudents] = useState("")
   const {user} = useContext(AppContext)
@@ -133,7 +134,7 @@ const CreateAttendance = () => {
   //  Find All Students Based on branch,class and sem
   const fetchStu = () => {
     setLoading(true)
-    axios.get(`http://localhost:5000/api/att/getstu/${branch}/${classes}/${sem}`)
+    axios.get(`http://localhost:5000/api/att/getstu/${branch}/${classes}/${sem}/${endYear}`)
     .then(res => {
       // Sort By Roll No
       res.data.students.sort((a, b) => a.rollNo - b.rollNo);
@@ -158,7 +159,8 @@ const CreateAttendance = () => {
          subject,
          branch,
          sem,
-         classes
+         classes,
+         batch:endYear
       }).then(res => {
         console.log(res.data)
         toast.success("Attendence Marked Successfully", {
@@ -387,6 +389,32 @@ const CreateAttendance = () => {
                   </Select>
             </FormControl>
 
+            <FormControl
+              sx={{
+                width: "40%",
+              }}
+            >
+              <InputLabel id="endYear">Batch</InputLabel>
+              <Select
+                    labelId="EndYear"
+                    value={endYear}
+                    label="endYear"
+                    onChange={(e) => setEndyear(e.target.value)}
+              >
+                 <MenuItem value="2020">2020 </MenuItem>
+                 <MenuItem value="2021">2021 </MenuItem>
+                 <MenuItem value="2022">2022 </MenuItem>
+                 <MenuItem value="2023">2023 </MenuItem>
+                 <MenuItem value="2024">2024 </MenuItem>
+                 <MenuItem value="2025">2025</MenuItem>
+                 <MenuItem value="2026">2026</MenuItem>
+                 <MenuItem value="2027">2027</MenuItem>
+                 <MenuItem value="2028">2028</MenuItem>
+                 <MenuItem value="2029">2029</MenuItem>
+                 <MenuItem value="2030">2030</MenuItem>
+                  </Select>
+            </FormControl>
+
   
             <Button
               variant="contained"
@@ -494,7 +522,7 @@ const CreateAttendance = () => {
                     </TableCell>
 
                     <TableCell component="th" scope="row">
-                       {percentage[per].toFixed(2)}
+                       {percentage[per]?.toFixed(2)}
                     </TableCell>
 
                   </TableRow>

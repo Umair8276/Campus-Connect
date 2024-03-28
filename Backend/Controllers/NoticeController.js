@@ -13,11 +13,11 @@ const createNotice = async(req,res) => {
 
 // Get Student Notice 
 const getNotice = async(req,res) => {
-    let  {branch,classes,sem} = req.params;
+    let  {branch,classes} = req.params;
     // console.log(req.params)
     let notice;
     try {
-        notice = await noticeModal.find({branch,class:classes,sem })
+        notice = await noticeModal.find({branch,class:classes })
     } catch (error) {
         console.log(error)
     }
@@ -67,9 +67,26 @@ const deleteNotice = async(req,res) => {
     return res.send({err:"Something went wrong"})
 }
 
+const updateNotice = async (req,res) => {
+    let notice;
+     try { 
+       notice = await noticeModal.findByIdAndUpdate(req.params.id,{
+         $set:req.body
+       },{
+        new:true
+       })
+     } catch (error) {
+        console.log(error)
+     }
+     if(notice)
+       return res.send({notice})
+    else
+      return res.send({err:"Something went Wrong"})
+}
 
 exports.createNotice = createNotice
 exports.getNotice = getNotice
 exports.getFacNotice = getFacNotice
 exports.getNoticeById = getNoticeById
 exports.deleteNotice = deleteNotice
+exports.updateNotice = updateNotice

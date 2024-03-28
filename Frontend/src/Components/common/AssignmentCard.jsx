@@ -38,7 +38,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Oval } from 'react-loader-spinner';
 import moment from 'moment';
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import { useNavigate } from "react-router-dom";
 
 
 function createData(rollNumber, name) {
@@ -78,7 +80,8 @@ const AssignmentCard = ({
   const [userAssignment,setUserAssignment] = useState("")
   const [commentData,setCommentData] = useState([]);
   const [resLoading,setResLoading] = useState(false)
-  const { user } = useContext(AppContext )
+  const { user } = useContext(AppContext );
+  const navigate = useNavigate()
 
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -255,6 +258,7 @@ const AssignmentCard = ({
     }).catch(err => {
       console.log(err)
     })
+   
   }
 
 
@@ -264,6 +268,12 @@ const AssignmentCard = ({
     getUserAssignment()
   },[]);
 
+  const deleteAss = (id) => {
+    console.log(id)
+    axios.delete(`http://localhost:5000/api/ass/deleteass/${id}`)
+    .then(res => console.log(res.data))
+    .catch(err => console.log(err))
+  }
 
   return (
     <>
@@ -292,9 +302,22 @@ const AssignmentCard = ({
            ""
          }
         </Typography>
+
+        <Box style={{width:"100%",display:"flex",justifyContent:"space-between"}}>
         <Typography fontWeight={550} fontSize={20} marginBottom={4}>
           {title}
         </Typography>
+          {
+            user.role!="student" &&
+          <>
+               <div style={{display:"flex",gap:"10px"}}>
+          <DeleteIcon style={{color:"red",cursor:"pointer"}} onClick={()=>deleteNotice(notices._id)}/>
+          <EditNoteIcon style={{color:"green",cursor:"pointer"}} onClick={() =>navigate(`/faculty/editassgn/${id}`) }/>
+            </div>
+          </>
+          }
+
+          </Box>
       
         </Stack>
         <Typography
@@ -304,6 +327,7 @@ const AssignmentCard = ({
         >
           Title : {title}
         </Typography>
+       
         <Typography
           sx={{
             color: "#9A9A9A",
@@ -334,7 +358,8 @@ const AssignmentCard = ({
             }}
           >
             <CalendarMonthIcon />
-           {percentage && percentage[per]?.averagePercentage}
+           {/* {percentage && percentage[per]?.averagePercentage} */}
+           {moment(scheduleDate).format('DD-MM-YYYY')}
           </Stack>
           {/* <Stack
             sx={{
@@ -463,6 +488,7 @@ const AssignmentCard = ({
                   borderRadius: "6px",
                 }}
               >
+                 {moment(scheduleDate).format('DD-MM-YYYY')}
                 {/* {scheduleDate.substring(0,10)} */}
                 {/* {format(scheduleDate, 'MMMM do yyyy, h:mm:ss a')} */}
                 {/* {moment().format(scheduleDate,'MMMM Do YYYY, h:mm:ss a')} */}

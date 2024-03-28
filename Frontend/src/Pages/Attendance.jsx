@@ -16,6 +16,7 @@ const Attendance = () => {
   const getFacultyAttendence = () => {
      axios.get(`http://localhost:5000/api/att/getfacatt/${user._id}`)
      .then(res => {
+      console.log(res.data)
       setData(res.data.facAtt)
      })
      .catch(err => {
@@ -97,6 +98,7 @@ const Attendance = () => {
               sem = {attendance.sem}
               present={attendance.present}
               classes={attendance.classes}
+              batch = {attendance.batch}
             />
           ))
         }

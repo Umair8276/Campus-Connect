@@ -1,0 +1,18 @@
+.stContainer{
+    width: 90%;
+    height: 500px;
+    /* background: #cebbbb; */
+    padding: 2% 5%;
+    margin-left: 60px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-radius: 5px;
+}
+.cont{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+}
+.input{
+    margin: 20px 20px;
+    /* display: flex; */
+}

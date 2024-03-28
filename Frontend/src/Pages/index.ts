@@ -16,6 +16,9 @@ import DisplayData from "./ClerkRole/DisplayData";
 import CreateNotice from "./CreateNotice";
 import EditData from "./EditData/EditData";
 import CheckAttendence from "./CheckAttendence/CheckAttendence";
+import StudentProfile from "./StudentProfile/StudentProfile";
+import EditNotice from "./EditNotice";
+import EditAssgn from "./EditAssgn";
 export { 
     Home, 
     LandingPage, 
@@ -34,5 +37,9 @@ export {
     DisplayData,
     CreateNotice,
     EditData,
-    CheckAttendence
+    CheckAttendence,
+    StudentProfile,
+    EditNotice,
+    EditAssgn
+    
 };

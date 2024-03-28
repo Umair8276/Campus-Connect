@@ -24,6 +24,7 @@ import { AppContext } from "../../Context/AuthContext";
 import axios from "axios";
 import { Oval } from 'react-loader-spinner';
 import moment from "moment"
+import EditNoteIcon from '@mui/icons-material/EditNote';
 
 const NoticeCard = () => {
   const [open, setOpen] = React.useState(false);
@@ -44,7 +45,7 @@ const NoticeCard = () => {
     })
   }
   const getStuNotice = () => {
-    axios.get(`http://localhost:5000/api/notice/getnotice/${user.branch}/${user.stu_class}/${user.currentSem}`)
+    axios.get(`http://localhost:5000/api/notice/getnotice/${user.branch}/${user.stu_class}`)
     .then(res => {
       console.log("Student NOtice",res.data.notice)
       setNotices(res.data.notice)
@@ -117,13 +118,16 @@ const NoticeCard = () => {
             gap: "2px",
           }}
         >
-          <Box style={{display:"flex",justifyContent:"space-between"}}>
+          <Box style={{display:"flex",justifyContent:"space-between",gap:"10px"}}>
           <Typography fontWeight={550} fontSize={20} marginBottom={4}>
            {notices.content}
           </Typography >
           {
             user.role!="student" &&
+            <div style={{display:"flex",gap:"10px"}}>
           <DeleteIcon style={{color:"red",cursor:"pointer"}} onClick={()=>deleteNotice(notices._id)}/>
+          <EditNoteIcon style={{color:"green",cursor:"pointer"}} onClick={() =>navigate(`/faculty/editnotice/${notices._id}`) }/>
+            </div>
           }
 
           </Box>
