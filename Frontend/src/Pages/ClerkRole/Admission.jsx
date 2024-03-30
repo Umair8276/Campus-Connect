@@ -74,7 +74,7 @@ const Form1 = () => {
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [sem,setSem] = React.useState("")
-  const [disable,setDisable] = React.useState(true)
+  const [formIsValid, setFormIsValid] = React.useState(false);
 
 
   const handleBack = () => {
@@ -118,39 +118,65 @@ const Form1 = () => {
   });
   const navigate = useNavigate();
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep ) => prevActiveStep + 1);
-  };
+  
 
+
+  const handleNext = () => {
+    if (activeStep === 0) {
+      // Check if all fields in step 1 are valid
+      if (Object.keys(errors).some((key) => key.startsWith('firstName') || key.startsWith('lastName') || key.startsWith('mobileNo') || key.startsWith('oldEmail') || key.startsWith('branch') )) {
+        toast.error('Please fill all required fields in Step 1');
+        return;
+      }
+    } else if (activeStep === 1) {
+      // Check if all fields in step 2 are valid
+      if (Object.keys(errors).some((key) => key.startsWith('adYear') || key.startsWith('gradYear') || key.startsWith('address') || key.startsWith('city') || key.startsWith('district'))) {
+        toast.error('Please fill all required fields in Step 2');
+        return;
+      }
+    } else if (activeStep === 2) {
+      // Check if all fields in step 3 are valid
+      if (Object.keys(errors).some((key) => key.startsWith('pincode') || key.startsWith('state') || key.startsWith('ttFees') || key.startsWith('feesPaid') || key.startsWith('stu_class') || key.startsWith('currentSem'))) {
+        toast.error('Please fill all required fields in Step 3');
+        return;
+      }
+    }
+  
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+  
   const handleSubmitt = () => {
-    console.log("Ziad", values,sem);
-    axios
-      .post("http://localhost:5000/api/stu/admission", {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        branch: values.branch,
-        startYear: values.adYear,
-        endYear: values.gradYear,
-        mobileNo: values.mobileNo,
-        address: values.address,
-        state: values.state,
-        city: values.city,
-        district: values.district,
-        pincode: values.pincode,
-        totalFees: values.ttFees,
-        feesPaid: values.feesPaid,
-        stu_class: values.stu_class,
-        currentSem: sem,
-        oldEmail: values.oldEmail,
-      })
-      .then((res) => {
-        console.log(res.data);
-        setSuccess(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    handleNext();
+    if(values.firstName && values.lastName && values.branch &&values.adYear && values.gradYear && values.mobileNo && values.address && values.state && values.city && values.district && values.pincode && values.ttFees &&  values.feesPaid &&  values.feesPaid && values.oldEmail ){
+      axios
+        .post("http://localhost:5000/api/stu/admission", {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          branch: values.branch,
+          startYear: values.adYear,
+          endYear: values.gradYear,
+          mobileNo: values.mobileNo,
+          address: values.address,
+          state: values.state,
+          city: values.city,
+          district: values.district,
+          pincode: values.pincode,
+          totalFees: values.ttFees,
+          feesPaid: values.feesPaid,
+          stu_class:  values.stu_class,
+          currentSem: sem,
+          oldEmail: values.oldEmail,
+        })
+        .then((res) => {
+          console.log(res.data);
+          setSuccess(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      handleNext();
+    }
+    else
+      toast.error('Please fill all the fields ');
   };
 
   return (
@@ -717,10 +743,7 @@ const Form1 = () => {
                     </FormControl>
 
                 
-                {/* <div style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>
-          <Button variant="contained" onClick={() => handleSubmitt()}>Submit</Button>
-
-        </div>  */}
+              
               </Box>
             </>
           )}
@@ -755,9 +778,13 @@ const Form1 = () => {
                 </Button>
 
                 {activeStep === steps.length - 1 ? (
-                  <Button onClick={() => handleSubmitt()}>Finish</Button>
+                   <Button  onClick={() => handleSubmitt()}>
+                   Finish
+                 </Button>
                 ) : (
-                  <Button onClick={handleNext} >Next</Button>
+                  <Button  onClick={handleNext}>
+                  Next
+                </Button>
                 )}
               </Box>
             </div>

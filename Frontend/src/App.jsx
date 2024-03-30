@@ -79,6 +79,7 @@ function App() {
               <Route path="/students" element={<ClerkAccess><DisplayData/></ClerkAccess>}/>
               <Route path="/notice" element={<ClerkAccess><Notice/></ClerkAccess>}/>
               <Route path="/attendence" element={<ClerkAccess><CheckAttendence/></ClerkAccess>}/>
+              <Route path="/createnotice" element={<ClerkAccess><CreateNotice /></ClerkAccess>} />
               <Route path="/edit/:id" element={<ClerkAccess><EditData/></ClerkAccess>}/>
               <Route path="/editnotice/:id" element={<ClerkAccess><EditNotice /></ClerkAccess>} />
             </Routes>
@@ -107,8 +108,8 @@ function App() {
             <Routes>
               {/* <Route path="/attendance" element={<Admission/>}/> */}
               <Route path="/assignments" element={<StudentAccess><Assignments/></StudentAccess>}/>
-              <Route path="/notice" element={ <Assignments> <Notice/></Assignments> }/>
-              <Route path="/profile" element={ <Assignments> <StudentProfile/></Assignments> }/>
+              <Route path="/notice" element={ <StudentAccess> <Notice/></StudentAccess> }/>
+              <Route path="/profile" element={ <StudentAccess> <StudentProfile/></StudentAccess> }/>
             </Routes>
             </Layout>
             </StudentAccess>

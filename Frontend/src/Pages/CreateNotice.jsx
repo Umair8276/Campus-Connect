@@ -85,7 +85,6 @@ const CreateNotice = () => {
               setContent("")
               setBranch("")
               setClasses("")
-              navigate
         }).catch(err => {
             console.log(err)
         })
@@ -93,7 +92,7 @@ const CreateNotice = () => {
         setTimeout(() => {
             setSuccess(false)
         }, 2000)
-        navigate("/faculty/notice")
+        navigate(user.role == "faculty" ? `/faculty/notice`:`/clerk/notice`)
     }
 
     return (

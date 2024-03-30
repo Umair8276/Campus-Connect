@@ -128,6 +128,12 @@ const updateData = () => {
     })
     .then(res => {
         console.log(res.data)
+        toast.success("Notice updated Successfully", {
+            autoClose: 2000, 
+          })
+          setTimeout( () => {
+            navigate("/clerk/notice")
+          },2000)
     }).catch(err => {
         console.log(err)
     })

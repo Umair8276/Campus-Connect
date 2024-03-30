@@ -4,10 +4,13 @@ import TextField from '@mui/material/TextField';
 import { Button, Typography } from '@mui/material';
 import axios from "axios";
 import { useState,useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function EditData() {
   const {id} =useParams();
+  const navigate = useNavigate()
   const [user,setUser] = useState({
     firstName:"",
     lastName:"",
@@ -53,13 +56,19 @@ export default function EditData() {
     })
     .then(res => {
       console.log(res.data)
-      // setUser(res.data.student)
+      toast.success("Student details Updated Successfully", {
+        autoClose: 2000, 
+      })
+      setTimeout( () => {
+        navigate("/clerk/students")
+      },2000)
     }).catch(err => {
       console.log(err)
     })
   }
 
   return (
+    <>
     <Box>
       <Typography fontWeight={550} fontSize={20} marginBottom={4}>Edit Student Details</Typography>
       <TextField id="outlined-basic" label="First Name" name='firstName' value={user.firstName} onChange={(e) => handleChange(e)} variant="outlined" sx={{m:1}} />
@@ -79,7 +88,11 @@ export default function EditData() {
       <TextField id="outlined-basic" label="Sem" name="currentSem" value={user.currentSem} onChange={(e) => handleChange(e)} variant="outlined" sx={{m:1}} />
       <TextField id="outlined-basic" label="old Email" name="oldEmail" value={user.oldEmail} onChange={(e) => handleChange(e)} variant="outlined" sx={{m:1}} />
       <TextField id="outlined-basic" label="New Email" name="newEmail" value={user.newEmail} onChange={(e) => handleChange(e)} variant="outlined" sx={{m:1}} />
-      <Button varient="contained" onClick={updateStudent}>Submit</Button>
           </Box>
+          <Box style={{width:"100%",display:"flex",justifyContent:"center"}}>
+
+          <Button variant="contained" onClick={() => updateStudent()}>Submit</Button>       
+          </Box>
+             </>
   );
 }

@@ -59,7 +59,7 @@ const {user} = useContext(AppContext)
              ?
              <></>
              :
-             <Button variant="contained" onClick={() => navigate("/faculty/createnotice", { replace: true })}>Create Notice</Button>
+             <Button variant="contained" onClick={() =>{ user.role == "faculty" ?  navigate(`/faculty/createnotice`) : navigate(`/clerk/createnotice`)} }>Create Notice</Button>
 
           }
         </Box>

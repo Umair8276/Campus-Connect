@@ -171,10 +171,11 @@ const CheckAttendence = () => {
      })
   }
  
-  const sendMail = (email) => {
+  const sendMail = (email,attendence) => {
     console.log(email)
      axios.post("http://localhost:5000/api/att/sendmail",{
-       email
+       email,
+       attendence
      })
      .then(res => {
       console.log(res.data)
@@ -468,7 +469,7 @@ const CheckAttendence = () => {
                      }
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      <Button varient = "contained" onClick={() => sendMail(stu.oldEmail)} disabled={ percentage[per]?.averagePercentage < "75" ? false : true}>Send Mail</Button>
+                      <Button varient = "contained" onClick={() => sendMail(stu.oldEmail,percentage[per].averagePercentage)} disabled={ percentage[per]?.averagePercentage < "75" ? false : true}>Send Mail</Button>
                     </TableCell>
 
                   </TableRow>
