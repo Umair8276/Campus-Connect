@@ -19,6 +19,7 @@ import CheckAttendence from "./CheckAttendence/CheckAttendence";
 import StudentProfile from "./StudentProfile/StudentProfile";
 import EditNotice from "./EditNotice";
 import EditAssgn from "./EditAssgn";
+import CheckFees from "./CheckFees/CheckFees";
 export { 
     Home, 
     LandingPage, 
@@ -40,6 +41,7 @@ export {
     CheckAttendence,
     StudentProfile,
     EditNotice,
-    EditAssgn
+    EditAssgn,
+    CheckFees
     
 };

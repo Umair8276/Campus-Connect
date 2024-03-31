@@ -145,7 +145,7 @@ const NoticeCard = () => {
               color: "#9A9A9A",
             }}
           >
-            Class : {notices.class}
+            Class : {notices.classes}
           </Typography>
   
           <Stack
@@ -217,7 +217,7 @@ const NoticeCard = () => {
               Branch:{singleNotice.branch}
             </Typography>
             <Typography color="#D3D3D3" fontSize={20} fontWeight={450}>
-              Class : {singleNotice.class}
+              Class : {singleNotice.classes}
             </Typography>
             <Stack
               sx={{

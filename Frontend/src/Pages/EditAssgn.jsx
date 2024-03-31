@@ -35,7 +35,8 @@ import { Oval } from 'react-loader-spinner'
 import DownloadDoneIcon from '@mui/icons-material/DownloadDone';
 import axios from 'axios';
 import moment from 'moment';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -279,6 +280,12 @@ const updateAss = () => {
     })
     .then(res => {
         console.log(res.data)
+        toast.success("Assignment Updated Successfully", {
+          autoClose: 2000, 
+        })
+        setTimeout( () => {
+          navigate("/faculty/assignments", { replace: true })
+        },2500)
     }).catch(err => {
         console.log(err)
     })

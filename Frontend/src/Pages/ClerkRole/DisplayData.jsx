@@ -59,6 +59,7 @@ const DisplayData = () => {
   const [data,setData] = useState([])
   const navigate = useNavigate();
   const [endYear, setEndyear] = React.useState("");
+  const [error,setError] = useState("")
 
   const getData = () => {
     console.log(branch,stu_class,rollNo)
@@ -69,11 +70,16 @@ const DisplayData = () => {
      endYear
     }).then(res => {
       console.log(res.data)
+      if(res.data.student.length == 0){
+         setError("No Data Found")
+      }
       setData(res.data.student)
     }).catch(err =>{
       console.log(err)
     })
   }
+
+
 
   return (
     <>
@@ -159,7 +165,7 @@ const DisplayData = () => {
         <Table sx={{ minWidth: 500 }} aria-label="customized table">
           {
             data.length!=0
-            ?
+            &&
             <TableHead>
             <TableRow>
               <StyledTableCell>Admission Id</StyledTableCell>
@@ -171,12 +177,12 @@ const DisplayData = () => {
               <StyledTableCell align="right">Operation</StyledTableCell>
             </TableRow>
           </TableHead>
-          :
-          <></>
           }
         
           <TableBody>
-            {data.map((data) => (
+            {data.length > 0 
+            ?
+            data.map((data) => (
               <StyledTableRow key={data._id}>
                   <StyledTableCell align="left">
                   {data._id}
@@ -193,7 +199,9 @@ const DisplayData = () => {
                 </StyledTableCell>
 
               </StyledTableRow>
-            ))}
+            ))
+          :
+          <h1>{error}</h1>}
           </TableBody>
         </Table>
 

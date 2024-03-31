@@ -82,6 +82,8 @@ const AssignmentCard = ({
   const [resLoading,setResLoading] = useState(false)
   const { user } = useContext(AppContext );
   const navigate = useNavigate()
+  const [newDate,setNewDate] = useState(null)
+  
 
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -94,11 +96,23 @@ const AssignmentCard = ({
     whiteSpace: "nowrap",
     width: 1,
   });
+
+  useEffect( () => {
+    let currentDate = new Date();
+    let momentDate = moment(currentDate).format('DD-MM-YYYY');
+    console.log("currentDate : ",momentDate)
+    setNewDate(momentDate)
+  },[])
+
+  useEffect( () => {
+    console.log("Resultts",newDate > moment(lastDate).format('DD-MM-YYYY'))
+  },[newDate])
   
 
   const handlePublishOpen = () => {
     setPublish(true);
   }
+
   const handlePublishClose = () => {
     setPublish(false);
 
@@ -147,7 +161,7 @@ const AssignmentCard = ({
             setIsLoading(false)
         });
       
-  };
+  }
 
   
 
@@ -220,8 +234,7 @@ const AssignmentCard = ({
     setResLoading(true)
     axios.get(`http://localhost:5000/api/ass/findresponse/${id}`)
     .then(res => {
-      console.log("Assignment Count : " , res.data)
-      //  setCount(res.data.count)
+    
        setStudent(res.data.resp)
        setResLoading(false)
     }).catch(err => {
@@ -279,7 +292,7 @@ const AssignmentCard = ({
     <>
     
       <Paper
-        elevation={0.5}
+        elevation={1}
         sx={{
           width: "340px",
           padding: "15px",
@@ -521,7 +534,7 @@ const AssignmentCard = ({
                   borderRadius: "6px",
                 }}
               >
-                 {moment(date).format('DD-MM-YYYY')}
+                 {moment(lastDate).format('DD-MM-YYYY')}
               </Button>
           
             </Stack>
@@ -595,6 +608,7 @@ const AssignmentCard = ({
                   // mt: "2rem",
                   width:"350px"
                 }}
+                disabled={ newDate > moment(lastDate).format('DD-MM-YYYY') ? true : false}
               >
                {/* {response.includes(user._id) ? "Re-Upload file" : "Upload file"} */}
                Upload file

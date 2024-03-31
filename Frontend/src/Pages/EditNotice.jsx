@@ -132,7 +132,7 @@ const updateData = () => {
             autoClose: 2000, 
           })
           setTimeout( () => {
-            navigate("/clerk/notice")
+            navigate(user.role == "clerk" ? "/clerk/notice" : "/faculty/notice")
           },2000)
     }).catch(err => {
         console.log(err)

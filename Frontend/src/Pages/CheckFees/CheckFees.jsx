@@ -29,7 +29,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
   import { AppContext } from "../../Context/AuthContext";
   import { Oval } from 'react-loader-spinner';
 
-const CheckAttendence = () => {
+const CheckFees = () => {
     const [subject, setSubject] = React.useState("");
     const [classes,setClasses] = useState("")
     const [branch, setBranch] = React.useState("");
@@ -43,7 +43,7 @@ const CheckAttendence = () => {
     const [percentage,setPercentage] = useState([])
     const [sub,setSub] = useState();
     const [error,setError] = useState("")
-
+    const [loadingList, setLoadingList] = useState(new Array(students.length).fill(false));
    
 
       const engineeringSubjects = [
@@ -120,11 +120,11 @@ const CheckAttendence = () => {
         .then(res => {
           // Sort By Roll No
           res.data.students.sort((a, b) => a.rollNo - b.rollNo);
-          console.log("Students : ",res.data.students)
+          console.log("Students : ",res.data.students);
           if(res.data.students.length == 0){
-             setError("No Data Found")
-             return 
-          }
+            setError("No Data Found")
+            return 
+         }
           setStudents(res.data.students)
           setTotalStudents(res.data.students.length)
         })
@@ -133,12 +133,12 @@ const CheckAttendence = () => {
         })
       }
 
+
    const calcOverAllPercentage = () => {
      console.log(sub.subjects)
      axios.post("http://localhost:5000/api/att/calperc",{
        subjects:sub.subjects,
-       batch:endYear,
-       branch
+       batch:endYear
      }).then(res => {
        console.log(res.data.attendancePercentages)
        setPercentage(res.data.attendancePercentages)
@@ -147,17 +147,23 @@ const CheckAttendence = () => {
      })
   }
  
-  const sendMail = (email,attendence) => {
-    console.log(email)
-     axios.post("http://localhost:5000/api/att/sendmail",{
+  const sendMail = (i,email,totalFees,feesPaid) => {
+    const updatedLoadingList = [...loadingList];
+    updatedLoadingList[i] = true;
+    setLoadingList(updatedLoadingList);
+     axios.post("http://localhost:5000/api/stu/sendmail",{
        email,
-       attendence
+       feesPaid,
+       totalFees
      })
      .then(res => {
       console.log(res.data)
       toast.success("mail sent Successfully", {
         autoClose: 2000, 
       })
+      const updateList = [...loadingList];
+      updateList[i] = false;
+      setLoadingList(updateList);
      }).catch(err => {
       console.log(err)
      })
@@ -187,7 +193,7 @@ const CheckAttendence = () => {
             </IconButton>
           </Tooltip>
           <Typography fontWeight={450} fontSize={35}>
-           Check Student Attendence
+           Check Student Fees
           </Typography>
         </Toolbar>
         <Box
@@ -402,18 +408,17 @@ const CheckAttendence = () => {
                 <TableRow>
                   <TableCell>Roll Number</TableCell>
                   <TableCell>Student Name</TableCell>
-                  {/* <TableCell>Attendance</TableCell> */}
-                  <TableCell>Percentage</TableCell>
+                  <TableCell>Total Fees</TableCell>
+                  <TableCell>Fees Paid</TableCell>
+                  <TableCell>Email</TableCell>
                   <TableCell>Operation</TableCell>
-                 
-                 
                 </TableRow>
               </TableHead>
               }
               <TableBody>
-                {percentage && students.length > 0
+                { students && students.length > 0
                 ?
-                students.map((stu,per,p) => (
+                students.map((stu,i) => (
                 
                   <TableRow
                     key={stu.rollNo}
@@ -429,25 +434,37 @@ const CheckAttendence = () => {
                     {/* <TableCell>
                       <MaintainAttendance branch = {branch} classes = {classes} subject = {subject} sem = {sem} studentId = {stu._id} facultyId = {user._id}   />
                     </TableCell> */}
+{/* import { Oval } from 'react-loader-spinner'; */}
 
-                    <TableCell component="th" scope="row" style={{color:percentage && percentage[per]?.averagePercentage < 75 ? "red" : "green"}}>
-                     {
-                      percentage.length > 0
-                      ?
-                       percentage[per].averagePercentage?.toFixed(2) +  "%"
-                      :
-                      <Oval
-                    visible={true}
-                    height="30"
-                    width="30"
-                    color="#4fa94d"
-                   ariaLabel="oval-loading"
-                   
-                   />
-                     }
+                    <TableCell component="th" scope="row">
+                       {stu.totalFees}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      <Button varient = "contained" onClick={() => sendMail(stu.oldEmail,percentage[per].averagePercentage)} disabled={ percentage[per]?.averagePercentage < "75" ? false : true}>Send Mail</Button>
+                       {stu.feesPaid}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                       {stu.oldEmail}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {
+                        loadingList[i]
+                        ?
+                        <Oval
+                        visible={true}
+                        height="40"
+                        width="40"
+                        color="#4fa94d"
+                       ariaLabel="oval-loading"
+                       wrapperStyle={{}}
+                       wrapperClass=""
+                       />
+                       :
+                       <Button varient = "contained" onClick={() => sendMail(i,stu.oldEmail,stu.totalFees,stu.feesPaid)}>
+                        
+                        Send Mail
+                       </Button>
+
+                      }
                     </TableCell>
 
                   </TableRow>
@@ -470,4 +487,4 @@ const CheckAttendence = () => {
   );
 }
 
-export default CheckAttendence
+export default CheckFees

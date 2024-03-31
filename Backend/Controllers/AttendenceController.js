@@ -36,7 +36,6 @@ const createAttendence = async(req,res) => {
   //  Find Total Students of particular branch
   const fetchStudents = async(req,res) => {
    const {branch,stu_class,currentSem,endYear} = req.params;
-   console.log(req.params)
     let students;
     try {
       students = await studentModal.find({branch,stu_class,currentSem,endYear})
@@ -81,9 +80,10 @@ const getFacAttendence = async(req,res) => {
 
 
 const calcOverAllPercentage = async (req, res) => {
-  let {batch} = req.body
+  let {batch,branch} = req.body;
+  console.log(batch,branch)
   try {
-    const students = await studentModal.find({endYear:batch}); // Assuming you have a Admission model
+    const students = await studentModal.find({endYear:batch,branch}); // Assuming you have a Admission model
     // console.log(students)
 
     const attendancePercentages = [];
@@ -113,7 +113,6 @@ const calcOverAllPercentage = async (req, res) => {
     }
 
     return res.send({ attendancePercentages });
-    console.log(attendancePercentages)
   } catch (err) {
     console.log(err);
     return res.send({ error: 'Internal Server Error' });
@@ -127,13 +126,13 @@ const sendEmail = async(req,res) => {
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'szaid9564@gmail.com',
-            pass: 'g u a g r k p z i v o g n c q r'
+            user: 'umairdadan1999@gmail.com',
+            pass: 'qvhv pott uauj jubh'
         }
     });
 
     const mailOptions = {
-        from: 'szaid9564@gmail.com',
+        from: 'umairdadan1999@gmail.com',
         to: email,
         subject: 'Low Attendence',
         html: `

@@ -9,6 +9,11 @@ import OnlinePredictionIcon from "@mui/icons-material/OnlinePrediction";
 import NoteAddOutlinedIcon from "@mui/icons-material/NoteAddOutlined";
 import NoteAltOutlinedIcon from "@mui/icons-material/NoteAltOutlined";
 import LayersIcon from "@mui/icons-material/Layers";
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import PaymentsIcon from '@mui/icons-material/Payments';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import PersonIcon from '@mui/icons-material/Person';
 
 export const adminMenu = [
 
@@ -33,6 +38,11 @@ export const adminMenu = [
       icon: <NoteAddOutlinedIcon />,
       path: "/admin/notice",
     },
+    {
+      title: "Fees",
+      icon: <NoteAddOutlinedIcon />,
+      path: "/clerk/checkfees",
+    },
   ];
 
 
@@ -40,17 +50,17 @@ export const adminMenu = [
     
     { 
       title: "Admission",
-      icon: <BackHandOutlinedIcon />,
+      icon: <AccountBalanceIcon />,
       path: "/clerk/admission",
     },
     {
       title: "Students",
-      icon: <NoteAltOutlinedIcon />,
+      icon: <GroupAddIcon />,
       path: "/clerk/students",
     },
     {
       title: "Attendence",
-      icon: <NoteAltOutlinedIcon />,
+      icon: <BackHandOutlinedIcon />,
       path: "/clerk/attendence",
     },
     {
@@ -58,18 +68,23 @@ export const adminMenu = [
       icon: <NoteAddOutlinedIcon />,
       path: "/clerk/notice",
     },
+    {
+      title: "Fees",
+      icon: <PaymentsIcon />,
+      path: "/clerk/checkfees",
+    },
   ];
   
   export const studentMenu = [
     
     {
-      title: "student",
-      icon: <BackHandOutlinedIcon />,
+      title: "Student",
+      icon: <PersonIcon />,
       path: "/student/profile",
     },
     {
       title: "Assignments",
-      icon: <NoteAltOutlinedIcon />,
+      icon: <AutoStoriesIcon />,
       path: "/student/assignments",
     },
 
@@ -89,18 +104,19 @@ export const adminMenu = [
     },
     {
       title: "Assignments",
-      icon: <NoteAltOutlinedIcon />,
+      icon: <AutoStoriesIcon />,
       path: "/faculty/assignments",
     },
-    // {
-    //   title: "Batches",
-    //   icon: <LayersIcon />,
-    //   path: "/faculty/batches",
-    // },
+  
     {
       title: "Notice",
       icon: <NoteAddOutlinedIcon />,
       path: "/faculty/notice",
+    },
+    {
+      title: "Fees",
+      icon: <PaymentsIcon />,
+      path: "/faculty/checkfees",
     },
   ]
   

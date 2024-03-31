@@ -119,23 +119,18 @@ const Form1 = () => {
   const navigate = useNavigate();
 
   
-
-
   const handleNext = () => {
     if (activeStep === 0) {
-      // Check if all fields in step 1 are valid
       if (Object.keys(errors).some((key) => key.startsWith('firstName') || key.startsWith('lastName') || key.startsWith('mobileNo') || key.startsWith('oldEmail') || key.startsWith('branch') )) {
         toast.error('Please fill all required fields in Step 1');
         return;
       }
     } else if (activeStep === 1) {
-      // Check if all fields in step 2 are valid
       if (Object.keys(errors).some((key) => key.startsWith('adYear') || key.startsWith('gradYear') || key.startsWith('address') || key.startsWith('city') || key.startsWith('district'))) {
         toast.error('Please fill all required fields in Step 2');
         return;
       }
     } else if (activeStep === 2) {
-      // Check if all fields in step 3 are valid
       if (Object.keys(errors).some((key) => key.startsWith('pincode') || key.startsWith('state') || key.startsWith('ttFees') || key.startsWith('feesPaid') || key.startsWith('stu_class') || key.startsWith('currentSem'))) {
         toast.error('Please fill all required fields in Step 3');
         return;
@@ -239,6 +234,7 @@ const Form1 = () => {
                   gap: 5,
                   marginTop: "5rem",
                 }}
+                
               >
                 <Typography
                   fontWeight={700}
@@ -291,7 +287,7 @@ const Form1 = () => {
                 autoComplete="off"
               >
                 <TextField
-                  id="outlined-multiline-flexible"
+                  id="outlined-multiline-flexible v"
                   label="Enter FirstName"
                   multiline
                   maxRows={4}
@@ -300,7 +296,7 @@ const Form1 = () => {
                   onChange={handleChange("firstName")}
                   onBlur={() => setFieldTouched("firstName")}
                 />
-                {touched.firstName && errors.firstName && (
+                {touched.firstName && errors.firstName && ( 
                   <h5
                     style={{
                       color: "red",

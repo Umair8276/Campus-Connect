@@ -64,7 +64,7 @@ const Header = () => {
     setAnchorElUser(null);
   };
   const handleProfileMenu = () => {
-    navigate("/instructor/profile",{replace:true});
+    navigate("/student/profile",{replace:true});
     setAnchorElUser(null);
   };
 

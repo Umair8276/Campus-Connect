@@ -62,13 +62,13 @@ const Admission = async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-          user: 'szaid9564@gmail.com',
-          pass: 'g u a g r k p z i v o g n c q r'
+          user: 'umairdadan1999@gmail.com',
+          pass: 'qvhv pott uauj jubh'
       }
   });
 
   const mailOptions = {
-      from: 'szaid9564@gmail.com',
+      from: 'umairdadan1999@gmail.com',
       to: oldEmail,
       subject: 'Your Username and Password',
       html: `
@@ -92,39 +92,38 @@ const Admission = async (req, res) => {
    
 }
 
-// const sendEmail = async(req,res) => {
-//     const {email} = req.body;
-//       // Sending Mail to the user
-//       const transporter = nodemailer.createTransport({
-//         service: 'gmail',
-//         auth: {
-//             user: 'szaid9564@gmail.com',
-//             pass: 'g u a g r k p z i v o g n c q r'
-//         }
-//     });
+const sendFeesEmail = async(req,res) => {
+    const {email,feesPaid,totalFees} = req.body;
+      // Sending Mail to the user
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'umairdadan1999@gmail.com',
+          pass: 'qvhv pott uauj jubh'
+        }
+    });
 
-//     const mailOptions = {
-//         from: 'szaid9564@gmail.com',
-//         to: email,
-//         subject: 'Your Username and Password',
-//         html: `
-//             <p>Here are your login credentials:</p>
-//             <p><strong>Username:</strong></p>
-//             <p><strong>Password:</strong> </p>
-//         `
-//     };
+    const mailOptions = {
+        from: 'umairdadan1999@gmail.com',
+        to: email,
+        subject: 'Notice Regarding fees',
+        html: `
+            <h3>Your Total fees is <strong>${totalFees}</strong> and you are payed till now is rs.<strong>${feesPaid}<strong/> . You Have to pay your remaining fees which is <strong>${totalFees - feesPaid}</strong> otherwise you will not allowed to sit in the exam</h3>
+         
+        `
+    };
 
   
-//     transporter.sendMail(mailOptions, (error, info) => {
-//         if (error) {
-//             console.error(error);
-//             res.status(500).json({ success: false, message: 'Failed to send email' });
-//         } else {
-//             console.log('Email sent: ' + info.response);
-//             res.status(200).json({ success: true, message: 'Email sent successfully' });
-//         }
-//     });
-// }
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error(error);
+            res.status(500).json({ success: false, message: 'Failed to send email' });
+        } else {
+            console.log('Email sent: ' + info.response);
+            res.status(200).json({ success: true, message: 'Email sent successfully' });
+        }
+    });
+}
 
   
 
@@ -217,4 +216,5 @@ exports.studentLogin = studentLogin;
 exports.SearchStudent = SearchStudent;
 exports.updateStudent = updateStudent;
 exports.getSingleStudent = getSingleStudent;
+exports.sendFeesEmail = sendFeesEmail;
 

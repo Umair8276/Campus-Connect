@@ -52,7 +52,7 @@ const facultyLogin = async(req,res) => {
 
     }
     else 
-      return res.send({msg:"Password is incorrect"});
+      return res.send({err:"Password is incorrect"});
   }
   else{
     return res.send({err:"Please Signup"});
