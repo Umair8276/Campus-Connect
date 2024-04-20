@@ -80,6 +80,9 @@ const admissionSchema = new mongoose.Schema({
     password:{
         type:String,
     },
+    profile:{
+        type:String,
+    },
 
     
 },

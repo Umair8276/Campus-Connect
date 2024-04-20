@@ -292,16 +292,16 @@ const AssignmentCard = ({
     <>
     
       <Paper
-        elevation={1}
+        elevation={0.3}
         sx={{
           width: "340px",
           padding: "15px",
           borderRadius: "12px",
-          height: "300px",
+          height: "270px",
           display: "flex",
           flexDirection: "column",
           border: "1px solid #E6E6E6",
-          gap: "2px",
+          // gap: "2px",
         }}
       >
         <Stack sx={{ display: "flex",
@@ -427,6 +427,7 @@ const AssignmentCard = ({
             fullWidth
             variant="outlined"
             sx={{
+              marginTop:"1rem",
               padding: "10px",
             }}
             onClick={() => setOpenHistory(true)}
@@ -982,7 +983,7 @@ const AssignmentCard = ({
                   >
                     {moment(scheduleDate).format('DD-MM-YYYY')}
                   </Button>
-                  <Button
+                  {/* <Button
                     sx={{
                       color: "black",
                       bgcolor: "#EDEDF5",
@@ -992,7 +993,7 @@ const AssignmentCard = ({
                     startIcon={<AccessTimeFilledIcon />}
                   >
                     {time}
-                  </Button>
+                  </Button> */}
                 </Stack>
                 <Typography
                   marginTop={6}
@@ -1021,7 +1022,7 @@ const AssignmentCard = ({
                   >
                      {moment(lastDate).format('DD-MM-YYYY')}
                   </Button>
-                  <Button
+                  {/* <Button
                     sx={{
                       color: "black",
                       bgcolor: "#EDEDF5",
@@ -1031,7 +1032,7 @@ const AssignmentCard = ({
                     startIcon={<AccessTimeFilledIcon />}
                   >
                     {time}
-                  </Button>
+                  </Button> */}
                 </Stack>
                 <Typography marginTop={10} fontWeight={450} fontSize={20}>
                   Student Status

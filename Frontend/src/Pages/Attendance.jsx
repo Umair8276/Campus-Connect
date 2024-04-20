@@ -12,6 +12,7 @@ const Attendance = () => {
   const {user} = useContext(AppContext);
   const [data,setData] = useState([])
   const navigate = useNavigate();
+  const [search,setSearch] = useState("")
   const [query,setQuery] = useState("")
   const getFacultyAttendence = () => {
      axios.get(`http://localhost:5000/api/att/getfacatt/${user._id}`)
@@ -85,10 +86,18 @@ const Attendance = () => {
       
       autoComplete="off"
     >
-      <TextField id="outlined-basic" label="Search by date"  variant="outlined" onKeyUp={(e) => {handleSearch(e)}} />
+      <TextField id="outlined-basic" label="Search by date"  variant="outlined" onChange={(e) =>setSearch(e.target.value) } />
     </Box>
         {
-          data.map((attendance,index)=>(
+          data && data.length > 0 && data
+          .filter(att => {
+            if(search == "") {
+              return att
+            }
+            else if(att.createdAt.toString() == search){
+              console.log("att",att)
+            }
+          }).map((attendance,index)=>(
             <AttandanceList 
               key={index}
               data={attendance}

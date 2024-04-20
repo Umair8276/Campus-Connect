@@ -16,6 +16,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import InputLabel from '@mui/material/InputLabel';
 import { useState } from 'react';
+import Avatar from '@mui/material/Avatar';
 import axios from "axios"
 import { useNavigate } from 'react-router-dom';
 
@@ -168,6 +169,7 @@ const DisplayData = () => {
             &&
             <TableHead>
             <TableRow>
+              <StyledTableCell>Profile</StyledTableCell>
               <StyledTableCell>Admission Id</StyledTableCell>
               <StyledTableCell align="right">First Name</StyledTableCell>
               <StyledTableCell align="right">Last Name</StyledTableCell>
@@ -184,6 +186,14 @@ const DisplayData = () => {
             ?
             data.map((data) => (
               <StyledTableRow key={data._id}>
+                  <StyledTableCell align="left">
+                  <Avatar
+        alt="Remy Sharp"
+        src={data?.profile}
+        sx={{ width: 35, height: 35}}
+      />
+      {/* {data.profile} */}
+                </StyledTableCell>
                   <StyledTableCell align="left">
                   {data._id}
                 </StyledTableCell>
@@ -211,4 +221,4 @@ const DisplayData = () => {
 
   );
 }
-export default DisplayData
+export default DisplayData;

@@ -31,6 +31,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Formik, useFormik } from "formik";
 import { styled } from "@mui/material/styles";
+import { Oval } from 'react-loader-spinner'
+import DownloadDoneIcon from '@mui/icons-material/DownloadDone';
+
 import TextField from "@mui/material/TextField";
 import * as Yup from "yup";
 import { ToastContainer, toast } from 'react-toastify';
@@ -59,6 +62,20 @@ const Form1 = () => {
     .required('Email is required'),
   });
 
+
+  const steps = ["Step 1 ", "Step 2 ", "Step 3"];
+
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [sem,setSem] = React.useState("")
+  const [formIsValid, setFormIsValid] = React.useState(false);
+  const [loading,setLoading] = React.useState()
+  const [file,setFile] = React.useState(false)
+
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
     clipPath: "inset(50%)",
@@ -70,16 +87,6 @@ const Form1 = () => {
     whiteSpace: "nowrap",
     width: 1,
   });
-  const steps = ["Step 1 ", "Step 2 ", "Step 3"];
-
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [sem,setSem] = React.useState("")
-  const [formIsValid, setFormIsValid] = React.useState(false);
-
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
 
   const initialValues = {
     firstName: "",
@@ -141,7 +148,7 @@ const Form1 = () => {
   };
   
   const handleSubmitt = () => {
-    if(values.firstName && values.lastName && values.branch &&values.adYear && values.gradYear && values.mobileNo && values.address && values.state && values.city && values.district && values.pincode && values.ttFees &&  values.feesPaid &&  values.feesPaid && values.oldEmail ){
+    if(values.firstName && values.lastName && values.branch &&values.adYear && values.gradYear && values.mobileNo && values.address && values.state && values.city && values.district && values.pincode && values.ttFees &&  values.feesPaid &&  values.feesPaid && values.oldEmail  ){
       axios
         .post("http://localhost:5000/api/stu/admission", {
           firstName: values.firstName,
@@ -160,6 +167,7 @@ const Form1 = () => {
           stu_class:  values.stu_class,
           currentSem: sem,
           oldEmail: values.oldEmail,
+          profile:file
         })
         .then((res) => {
           console.log(res.data);
@@ -173,6 +181,27 @@ const Form1 = () => {
     else
       toast.error('Please fill all the fields ');
   };
+
+
+  const handleUpload = async (url) => {
+    setLoading(true)
+    const data = new FormData();
+    data.append("file", url);
+    data.append("upload_preset", "pehzflst");
+    data.append("cloud_name", "zaidsiddiqui");
+    fetch("https://api.cloudinary.com/v1_1/zaidsiddiqui/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.url);
+        setFile(data.url)
+        setLoading(false)
+      });
+      
+  };
+
 
   return (
     <>
@@ -738,7 +767,38 @@ const Form1 = () => {
                     }
                     </FormControl>
 
-                
+
+                    <Button
+                  component="label"
+                  variant="outlined"
+                  startIcon={<CloudUploadIcon />}
+                  fullWidth
+                  sx={{
+                    mt: "0.6rem",
+                    // marginRight:"10px"
+                  }}
+                >
+                  Upload Profile
+                  {
+                  loading
+                  ?
+                  <Oval
+                    visible={true}
+                    height="20"
+                    width="20"
+                    color="#4fa94d"
+                   ariaLabel="oval-loading"
+                  
+                   />
+                   :
+                   loading==false
+                   ?
+                   <DownloadDoneIcon color="green"/>
+                   :
+                   <></>
+                }
+                  <VisuallyHiddenInput type="file" onChange={(e)=> handleUpload(e.target.files[0])} />
+                </Button> 
               
               </Box>
             </>

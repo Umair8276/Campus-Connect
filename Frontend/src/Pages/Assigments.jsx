@@ -293,7 +293,7 @@ const Assigments = () => {
                   overflowY: "scroll",
                   display: "flex",
                   flexWrap: "wrap",
-                  gap: "5rem",
+                  gap: "2rem",
                 }}
               >
                 {

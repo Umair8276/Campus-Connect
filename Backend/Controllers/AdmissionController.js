@@ -2,7 +2,7 @@ const AdmissionModal = require("../Modals/AdmissionModal");
 const nodemailer = require("nodemailer");
 
 const Admission = async (req, res) => {
-    const { firstName,lastName, branch, startYear, endYear, totalFees, feesPaid, remainingFees, mobileNo, stu_class, currentSem, rollNo, address,state,city,district,pincode,oldEmail } = req.body;
+    const { firstName,lastName, branch, startYear, endYear, totalFees, feesPaid, remainingFees, mobileNo, stu_class, currentSem, rollNo, address,state,city,district,pincode,oldEmail,profile } = req.body;
     let findStudent;
     // Check If Student Already exists in Db?
     try {
@@ -44,6 +44,7 @@ const Admission = async (req, res) => {
         currentSem,
         rollNo: roll_No,
         oldEmail,
+        profile,
         newEmail:generateEmail ,
         password:newPass
     });

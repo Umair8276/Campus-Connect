@@ -90,7 +90,7 @@ const Header = () => {
         >
           <Tooltip title="Open Settings">
             <IconButton sx={{ p: 0 }} onClick={handleOpenUserMenu}>
-              <Avatar />
+              <Avatar src={user?.profile} />
             </IconButton>
           </Tooltip>
           <Menu
