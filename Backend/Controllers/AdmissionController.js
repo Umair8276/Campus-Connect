@@ -22,7 +22,7 @@ const Admission = async (req, res) => {
         console.log(error)
     }
     let roll_No = total_count == 0 ?  1 : total_count + 1
-    let generateEmail = startYear.substring(0,2) + branch.substring(0,2).toUpperCase() + (roll_No > 9 ? roll_No : `0${roll_No}`) + `@gmail.com`;
+    let generateEmail = startYear.substring(2,4) + branch.substring(0,2).toUpperCase() + (roll_No > 9 ? roll_No : `0${roll_No}`) + `@gmail.com`;
     let newPass = firstName+endYear;
     //New Admission
     const newAdmission = new AdmissionModal({
@@ -144,6 +144,7 @@ const getAllStudent = async(req,res) => {
 
 const studentLogin = async(req,res) => {
     const {oldEmail,password} = req.body;
+    console.log(req.body)
     let stLogin;
     try {
      stLogin = await AdmissionModal.findOne({newEmail:oldEmail});
@@ -151,7 +152,7 @@ const studentLogin = async(req,res) => {
       console.log(error)
     }
     if(stLogin){
-      if(stLogin.password==password)
+      if(stLogin.password===password)
         return res.send({msg:"Login Successfully",user:stLogin});
       else 
         return res.send({err:"Password is incorrect"});
@@ -211,6 +212,18 @@ const getSingleStudent = async(req,res) => {
       res.send({err:"Something went Wrong"})
 }
 
+
+const getStudents = async(req,res) => {
+    let students;
+    const {branch,endYear} = req.params;
+    try {
+        students = await AdmissionModal.find({branch,endYear})
+    } catch (error) {
+        console.log(error)
+    }
+    res.send({students})
+}
+
 exports.Admission = Admission;
 exports.getAllStudent = getAllStudent;
 exports.studentLogin = studentLogin;
@@ -218,4 +231,5 @@ exports.SearchStudent = SearchStudent;
 exports.updateStudent = updateStudent;
 exports.getSingleStudent = getSingleStudent;
 exports.sendFeesEmail = sendFeesEmail;
+exports.getStudents = getStudents;
 

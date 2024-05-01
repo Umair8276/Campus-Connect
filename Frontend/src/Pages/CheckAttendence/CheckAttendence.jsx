@@ -273,6 +273,9 @@ const CheckAttendence = () => {
       .then((res) => {
         console.log(res.data.attendancePercentages);
         setPercentage(res.data.attendancePercentages);
+        setSem("");
+        setBranch("");
+        
       })
       .catch((err) => {
         console.log(err);

@@ -24,7 +24,8 @@ import {
   StudentProfile,
   EditNotice,
   EditAssgn,
-  CheckFees
+  CheckFees,
+  StudentAttendence
 } from "./Pages/index.ts";
 import { Layout } from "./Components/Layout/index.ts";
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -85,6 +86,7 @@ function App() {
               <Route path="/edit/:id" element={<ClerkAccess><EditData/></ClerkAccess>}/>
               <Route path="/editnotice/:id" element={<ClerkAccess><EditNotice /></ClerkAccess>} />
               <Route path="/checkfees" element={<ClerkAccess><CheckFees /></ClerkAccess>} />
+              <Route path="/stuatt" element={<ClerkAccess><StudentAttendence /></ClerkAccess>} />
             </Routes>
             </Layout>
             </ClerkAccess>

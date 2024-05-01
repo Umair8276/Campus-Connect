@@ -81,13 +81,14 @@ const getFacAttendence = async(req,res) => {
 
 const calcOverAllPercentage = async (req, res) => {
   let {batch,branch} = req.body;
+  console.log(req.body.subjects)
   console.log(batch,branch)
   try {
     const students = await studentModal.find({endYear:batch,branch}); // Assuming you have a Admission model
     // console.log(students)
 
     const attendancePercentages = [];
-
+    
     // Iterate over each student
     for (const student of students) {
       let totalLectures = 0;
@@ -118,6 +119,50 @@ const calcOverAllPercentage = async (req, res) => {
     return res.send({ error: 'Internal Server Error' });
   }
 };
+
+
+// Calculate Sem Wise Percentage
+const CalcAttPercentage = async(req,res) => {
+  console.log(req.body)
+  console.log(req.body.subjects)
+  let {id} = req.body;
+  let totalLectures = 0;
+  let totalAttended = 0;
+  const attendancePercentages = [];
+  // const students = await studentModal.find({endYear:batch,branch});
+
+  try {
+      for (const subject of req.body.subjects) { 
+        const ttLecture = await attendenceModal.find({ subject }).count();
+  
+        // Find attended lectures for the student for the subject
+        const attendedLecs = await attendenceModal.find({ subject, studentId: id,sem:req.body.sem }).count();
+  
+        totalLectures += ttLecture;
+        totalAttended += attendedLecs;
+      }  
+    const averagePercentage = (totalAttended / totalLectures) * 100;
+      
+    // Push the student's average percentage to the array
+    attendancePercentages.push({ studentId: id, averagePercentage });
+    return res.send({ attendancePercentages });
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getStudent = async(req,res) => {
+  let students;
+  totalStudents = [];
+  const {branch,sem,batch} = req.params;
+  try {
+       students = await attendenceModal.find({branch,sem,batch}).populate("studentId");
+  } catch (error) {
+    console.log(error)
+  }
+  
+  return res.send({students})
+}
 
 
 const sendEmail = async(req,res) => {
@@ -164,5 +209,7 @@ exports.fetchStudents = fetchStudents
 exports.getFacAttendence = getFacAttendence     
 exports.calcOverAllPercentage = calcOverAllPercentage     
 exports.sendEmail = sendEmail     
+exports.CalcAttPercentage = CalcAttPercentage     
+exports.getStudent = getStudent     
 
 

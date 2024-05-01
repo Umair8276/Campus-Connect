@@ -68,12 +68,13 @@ const Attendance = () => {
           <Button
             sx={{
               marginLeft: "auto",
+              marginRight:"10rem"
             }}
             variant="contained"
             startIcon={<AddIcon />}
             onClick={()=>navigate('/faculty/create-attendance',{replace:true})}
           >
-            Create
+            Create Attendence
           </Button>
         </Toolbar>
 

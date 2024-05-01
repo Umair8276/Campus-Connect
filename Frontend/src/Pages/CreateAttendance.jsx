@@ -60,6 +60,7 @@ const CreateAttendance = () => {
   const navigate = useNavigate();
   const [percentage,setPercentage] = useState([])
   const [loading,setLoading] = useState(false)
+  
 
   const [sub,setSub] = useState();
 
@@ -71,6 +72,43 @@ const CreateAttendance = () => {
         { semester: 2, subjects: ['MathI', 'Digital Logic Design', 'Data Structures', 'Electrical Circuits'] },
         { semester: 3, subjects: ['Computer Organization and Architecture', 'Database Management Systems', 'Object-Oriented Programming', 'Discrete Mathematics'] },
         { semester: 4, subjects: ['Algorithms', 'Microprocessors', 'Operating Systems', 'Computer Networks'] },
+        {
+          semester: 5,
+          subjects: [
+            "TCS",
+            "DWM",
+            "SE",
+            "Computer Networks",
+            "AI"
+          ],
+        },
+        {
+          semester: 6,
+          subjects: [
+            "IP",
+            "ML",
+            "MC",
+            "CSS",
+          ],
+        },
+        {
+          semester: 7,
+          subjects: [
+            "SPCC",
+            "CCl",
+            "IR",
+            "BDA ",
+          ],
+        },
+        {
+          semester: 8,
+          subjects: [
+            "DC",
+            "DL",
+            "SMA",
+            "EDM",
+          ],
+        },
         // Add more semesters and subjects as needed
       ]
     },
@@ -169,6 +207,8 @@ const CreateAttendance = () => {
         setTimeout( () => {
           navigate("/faculty/attendance")
         },2000)
+        setPresentStudent([]);
+        setAbsentStu([])
           
       }).catch(err => {
         console.log(err)
@@ -504,7 +544,7 @@ const CreateAttendance = () => {
               </TableHead>
               }
               <TableBody>
-                {percentage && students.map((stu,per,p) => (
+                {percentage && students.map((stu,per,p) => ( 
                 
                   <TableRow
                     key={stu.rollNo}

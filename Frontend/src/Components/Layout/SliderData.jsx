@@ -73,6 +73,11 @@ export const adminMenu = [
       icon: <PaymentsIcon />,
       path: "/clerk/checkfees",
     },
+    {
+      title: "Student Attendence",
+      icon: <PaymentsIcon />,
+      path: "/clerk/stuatt",
+    },
   ];
   
   export const studentMenu = [

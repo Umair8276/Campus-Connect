@@ -20,6 +20,7 @@ import StudentProfile from "./StudentProfile/StudentProfile";
 import EditNotice from "./EditNotice";
 import EditAssgn from "./EditAssgn";
 import CheckFees from "./CheckFees/CheckFees";
+import StudentAttendence from "./StudentAttendence"
 export { 
     Home, 
     LandingPage, 
@@ -42,6 +43,7 @@ export {
     StudentProfile,
     EditNotice,
     EditAssgn,
-    CheckFees
+    CheckFees,
+    StudentAttendence
     
 };

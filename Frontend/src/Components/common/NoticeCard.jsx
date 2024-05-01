@@ -34,6 +34,7 @@ const NoticeCard = () => {
   const [loading,setLoading] = useState(true)
   const {user} = useContext(AppContext)
 
+  // Get Faculty and clerk Notice
   const getNotice = () => {
     axios.get(`http://localhost:5000/api/notice/getfacnotice/${user.dept}`)
     .then(res => {
