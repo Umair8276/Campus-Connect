@@ -124,33 +124,36 @@ const calcOverAllPercentage = async (req, res) => {
 // Calculate Sem Wise Percentage
 const CalcAttPercentage = async(req,res) => {
   console.log(req.body)
-  console.log(req.body.subjects)
-  let {id} = req.body;
+  const {branch,batch,id,sem} = req.body
   let totalLectures = 0;
   let totalAttended = 0;
+   const numSubjects = req.body.subjects.length;
   const attendancePercentages = [];
   // const students = await studentModal.find({endYear:batch,branch});
 
   try {
       for (const subject of req.body.subjects) { 
-        const ttLecture = await attendenceModal.find({ subject }).count();
+        const ttLecture = await attendenceModal.find({ subject,branch,batch }).count();
   
         // Find attended lectures for the student for the subject
-        const attendedLecs = await attendenceModal.find({ subject, studentId: id,sem:req.body.sem }).count();
+        const attendedLecs = await attendenceModal.find({ subject, studentId: id,sem,branch,batch }).count();
   
         totalLectures += ttLecture;
         totalAttended += attendedLecs;
       }  
-    const averagePercentage = (totalAttended / totalLectures) * 100;
+      console.log("totalLectures",totalLectures)
+      console.log("totalAttended",totalAttended)
+
+      const averagePercentage = (totalAttended / totalLectures) * 100;
+      console.log("averagePercentage",averagePercentage)
+
+      attendancePercentages.push({ studentId: id, averagePercentage });
       
-    // Push the student's average percentage to the array
-    attendancePercentages.push({ studentId: id, averagePercentage });
     return res.send({ attendancePercentages });
   } catch (error) {
     console.log(error)
   }
 }
-
 const getStudent = async(req,res) => {
   let students;
   totalStudents = [];

@@ -328,7 +328,9 @@ import {
         .post("http://localhost:5000/api/att/getatt", {
           subjects: sub.subjects,
           sem:sem,
-          id
+          id,
+          branch,
+          batch:endYear
         })
         .then((res) => {
           console.log("Att",res.data.attendancePercentages);  

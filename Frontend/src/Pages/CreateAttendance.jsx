@@ -207,12 +207,12 @@ const CreateAttendance = () => {
         setTimeout( () => {
           navigate("/faculty/attendance")
         },2000)
-        setPresentStudent([]);
-        setAbsentStu([])
-          
+        
       }).catch(err => {
         console.log(err)
       })
+      setPresentStudent([]);
+      setAbsentStu([])
      
    }
 
